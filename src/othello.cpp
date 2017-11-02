@@ -2,26 +2,45 @@
 
 using namespace Othello;
 
-OthelloGame::OthelloGame() {
-  // TODO
+inline OthelloBitBoard positionToBoard(const unsigned char x,
+                                       const unsigned char y) {
+  return 1 << (63 - (x + 8 * y));
 }
 
-OthelloGame::~OthelloGame() {
-  // TODO
+inline OthelloBitBoard actionToBoard(const OthelloAction action) {
+  return 1 << (63 - action);
 }
+
+inline OthelloAction positionToAction(const unsigned char x,
+                                      const unsigned char y) {
+  return x + 8 * y;
+}
+
+OthelloGame::OthelloGame() {
+  this->blackBitBoard |= positionToBoard(3, 3);
+  this->blackBitBoard |= positionToBoard(4, 4);
+  this->whiteBitBoard |= positionToBoard(3, 4);
+  this->whiteBitBoard |= positionToBoard(4, 3);
+}
+
+OthelloGame::~OthelloGame() {}
 
 const OthelloAction OthelloGame::getActions(const OthelloState& state) const {
   // TODO
+  return 0;
 }
 
-const OthelloState OthelloGame::getResult(const OthelloAction action) const {
+const OthelloState OthelloGame::getResult(const OthelloState& state,
+                                          const OthelloAction action) const {
   // TODO
-
+  return std::make_tuple(this->blackBitBoard, this->whiteBitBoard);
 }
 
-void OthelloGame::performAction(OthelloState& state,
+void OthelloGame::performAction(const OthelloState& state,
                                 const OthelloAction action) {
-  // TODO
+  auto res = this->getResult(state, action);
+  this->blackBitBoard = std::get<0>(res);
+  this->whiteBitBoard = std::get<1>(res);
   this->currentPlayer = static_cast<OthelloPlayer>(-this->currentPlayer);
 }
 
@@ -29,6 +48,7 @@ const OthelloUtility
 OthelloGame::getUtility(const OthelloState& state,
                         const OthelloPlayer player) const {
   // TODO
+  return 0;
 }
 
 const bool OthelloGame::isTerminal(const OthelloState& state) const {

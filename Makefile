@@ -16,7 +16,7 @@ MKDIR := mkdir -p
 RM    := rm -rf
 
 CXX      ?= g++
-CXXFLAGS := --std=c++14 -O3 -D NDEBUG -Wall
+CXXFLAGS := --std=c++14 -O3 -D NDEBUG -Wall -Werror
 
 all : $(OBJECTS)
 test: $(TEST_OBJECTS)
