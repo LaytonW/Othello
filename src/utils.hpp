@@ -88,7 +88,7 @@ template <typename BitBoardType>
 inline auto positionToBoard(const std::size_t x, const std::size_t y) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = static_cast<std::size_t>(isqrt<boardSize>());
+  constexpr auto boardRow  = isqrt<boardSize>();
   return static_cast<BitBoardType>(1) << (boardSize - 1 - (x + boardRow * y));
 }
 
@@ -96,7 +96,7 @@ template <typename BitBoardType>
 inline auto getRow(const BitBoardType board, const std::size_t i) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = static_cast<std::size_t>(isqrt<boardSize>());
+  constexpr auto boardRow  = isqrt<boardSize>();
   using RowType = typename BitType<boardRow>::type;
   constexpr auto mask = static_cast<RowType>(~0);
   return (board >> ((boardRow - 1 - i) * boardRow)) & mask;
