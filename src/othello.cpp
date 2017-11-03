@@ -1,3 +1,4 @@
+#include "utils.hpp"
 #include "othello.hpp"
 
 using namespace Othello;
@@ -16,16 +17,6 @@ inline OthelloBitBoard positionToBoard(const uint8_t x, const uint8_t y) {
 
 constexpr inline const std::size_t indexOf(const OthelloPlayer player) {
   return player == black ? 0 : 1;
-}
-
-inline uint8_t countToken(const OthelloBitBoard board) {
-  if (board == 0)
-    return 0;
-  auto tmp = board;
-  uint8_t count = 1;
-  while (tmp &= tmp - 1)
-    count ++;
-  return count;
 }
 
 OthelloGame::OthelloGame() {
@@ -73,8 +64,8 @@ OthelloGame::getUtility(const OthelloState& state,
                         const OthelloPlayer player) const {
   // TODO: check if is terminal state
   char whiteUtility =
-    countToken(this->blackBitBoard) == countToken(this->whiteBitBoard) ? 0 :
-    countToken(this->blackBitBoard) <  countToken(this->whiteBitBoard) ? 1 : -1;
+    countOnes(this->blackBitBoard) == countOnes(this->whiteBitBoard) ? 0 :
+    countOnes(this->blackBitBoard) <  countOnes(this->whiteBitBoard) ? 1 : -1;
   return player * whiteUtility;
 }
 
