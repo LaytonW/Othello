@@ -3,27 +3,15 @@
 
 using namespace Othello;
 
-inline OthelloAction positionToAction(const uint8_t x, const uint8_t y) {
-  return x + 8 * y;
-}
-
-inline OthelloBitBoard actionToBoard(const OthelloAction action) {
-  return 1ull << (63 - action);
-}
-
-inline OthelloBitBoard positionToBoard(const uint8_t x, const uint8_t y) {
-  return actionToBoard(positionToAction(x, y));
-}
-
-constexpr inline const std::size_t indexOf(const OthelloPlayer player) {
+constexpr std::size_t indexOf(const OthelloPlayer player) {
   return player == black ? 0 : 1;
 }
 
 OthelloGame::OthelloGame() {
-  this->blackBitBoard |= positionToBoard(3, 4);
-  this->blackBitBoard |= positionToBoard(4, 3);
-  this->whiteBitBoard |= positionToBoard(3, 3);
-  this->whiteBitBoard |= positionToBoard(4, 4);
+  this->blackBitBoard |= positionToBoard<OthelloBitBoard>(3, 4);
+  this->blackBitBoard |= positionToBoard<OthelloBitBoard>(4, 3);
+  this->whiteBitBoard |= positionToBoard<OthelloBitBoard>(3, 3);
+  this->whiteBitBoard |= positionToBoard<OthelloBitBoard>(4, 4);
 }
 
 OthelloGame::~OthelloGame() {}
