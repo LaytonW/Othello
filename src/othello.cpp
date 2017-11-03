@@ -29,10 +29,10 @@ inline uint8_t countToken(const OthelloBitBoard board) {
 }
 
 OthelloGame::OthelloGame() {
-  this->blackBitBoard |= positionToBoard(3, 3);
-  this->blackBitBoard |= positionToBoard(4, 4);
-  this->whiteBitBoard |= positionToBoard(3, 4);
-  this->whiteBitBoard |= positionToBoard(4, 3);
+  this->blackBitBoard |= positionToBoard(3, 4);
+  this->blackBitBoard |= positionToBoard(4, 3);
+  this->whiteBitBoard |= positionToBoard(3, 3);
+  this->whiteBitBoard |= positionToBoard(4, 4);
 }
 
 OthelloGame::~OthelloGame() {}
