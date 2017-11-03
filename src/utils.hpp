@@ -9,19 +9,11 @@
 
 template<std::size_t i>
 struct BitType {
-  typedef typename std::conditional<
-    (i <= 8),
-    uint8_t,
-    typename std::conditional<
-      (i <= 16),
-      uint16_t,
-      typename std::conditional<
-        (i <= 32),
-        uint32_t,
-        uint64_t
-      >::type
+  using type = typename std::conditional<(i <= 8), uint8_t,
+    typename std::conditional<(i <= 16), uint16_t,
+      typename std::conditional<(i <= 32), uint32_t, uint64_t>::type
     >::type
-  >::type type;
+  >::type;
 };
 
 template <typename BitRepresentationType>
