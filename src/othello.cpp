@@ -71,9 +71,9 @@ OthelloGame::getUtility(const OthelloState& state,
 
 const bool OthelloGame::isTerminal(const OthelloState& state) const {
   bool filled = (this->blackBitBoard | this->whiteBitBoard) == ~0ull;
-  bool noMove = this->getActions(state, black) == 0 &&
+  bool noMove = this->getActions(state, black) == 0 and
                 this->getActions(state, white) == 0;
-  return filled || noMove;
+  return filled or noMove;
 }
 
 const OthelloPlayer OthelloGame::getPlayer(void) const {
