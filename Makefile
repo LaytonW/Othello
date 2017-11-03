@@ -10,23 +10,26 @@ SOURCES := $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 TEST_SOURCES := $(wildcard $(TESTDIR)/*.cpp)
-TEST_OBJECTS := $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(OBJDIR)/%.o)
+TEST_OBJECTS := $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(BINDIR)/%)
 
 MKDIR := mkdir -p
 RM    := rm -rf
 
 CXX      ?= g++
 CXXFLAGS := -std=c++14 -O3 -D NDEBUG -Wall -Werror
-TEST_CXXFLAGS := -std=c++14 -Og -ggdb -D DEBUG -Wall -Werror
+TEST_CXXFLAGS := -std=c++14 -Og -ggdb -D DEBUG -Wall -Werror -I$(SRCDIR)
 
 all : $(OBJECTS)
-test: $(TEST_OBJECTS)
+test: all $(TEST_OBJECTS)
 
 $(AUXDIR) :
 	$(MKDIR) $@
 
 $(OBJECTS) : $(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(OBJDIR)
 	$(CXX) -c -o $@ $^ $(CXXFLAGS)
+
+$(TEST_OBJECTS) : $(BINDIR)/% : $(TESTDIR)/%.cpp | $(BINDIR)
+	$(CXX) -o $@ $^ $(TEST_CXXFLAGS)
 
 clean :
 	$(RM) $(AUXDIR)
