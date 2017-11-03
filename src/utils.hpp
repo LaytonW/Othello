@@ -59,10 +59,10 @@ inline std::size_t countOnes(const BitStringType x) {
 template <std::size_t x>
 constexpr std::size_t isqrt(void) {
   static_assert(isPowerOf2(x), "Size is not a power of 2!");
-  auto tmp = ~x;
+  auto tmp = x;
   std::size_t numOfZeros = 0;
-  while (tmp != 0) {
-    tmp &= tmp - 1;
+  while (tmp != 1) {
+    tmp >>= 1;
     numOfZeros ++;
   }
   return x >> (numOfZeros / 2);
