@@ -270,14 +270,6 @@ int main() {
                    | positionToBoard<uint64_t>(1, 6)));
 
   assert(
-    antiClockRotate45(
-      clockRotate45(
-        positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1)
-      )
-    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
-  );
-
-  assert(
     antiClockRotate90(
       clockRotate90(
         positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1)
