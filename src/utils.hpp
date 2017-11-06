@@ -78,28 +78,36 @@ inline BitStringType rotateR(const BitStringType x, std::size_t n) {
 }
 
 template <std::size_t x>
-constexpr std::size_t isqrt(void) {
-  static_assert(isPowerOf2(x), "Size is not a power of 2!");
-  auto tmp = x;
-  std::size_t numOfZeros = 0;
-  while (tmp != 1) {
-    tmp >>= 1;
-    numOfZeros ++;
+struct isqrt {
+  static constexpr std::size_t _value(void) {
+    static_assert(isPowerOf2(x), "Size is not a power of 2!");
+    auto tmp = x;
+    std::size_t numOfZeros = 0;
+    while (tmp != 1) {
+      tmp >>= 1;
+      numOfZeros ++;
+    }
+    return x >> (numOfZeros / 2);
   }
-  return x >> (numOfZeros / 2);
-}
+
+  static constexpr std::size_t value = _value();
+};
 
 template <std::size_t x>
-constexpr std::size_t pow2(void) {
-  static_assert(isPowerOf2(x), "Size is not a power of 2!");
-  auto tmp = x;
-  std::size_t numOfZeros = 0;
-  while (tmp != 1) {
-    tmp >>= 1;
-    numOfZeros ++;
+struct pow2 {
+  static constexpr std::size_t _value(void) {
+    static_assert(isPowerOf2(x), "Size is not a power of 2!");
+    auto tmp = x;
+    std::size_t numOfZeros = 0;
+    while (tmp != 1) {
+      tmp >>= 1;
+      numOfZeros ++;
+    }
+    return x << numOfZeros;
   }
-  return x << numOfZeros;
-}
+
+  static constexpr std::size_t value = _value();
+};
 
 template <typename ActionType>
 inline ActionType positionToAction(const std::size_t x, const std::size_t y) {
@@ -110,7 +118,8 @@ inline ActionType positionToAction(const std::size_t x, const std::size_t y) {
 template <typename ActionType>
 inline auto actionToBoard(const ActionType action) {
   _sanityCheck<ActionType>();
-  using BitBoardType = BitType<pow2<std::numeric_limits<ActionType>::digits>()>;
+  using BitBoardType =
+    BitType<pow2<std::numeric_limits<ActionType>::digits>::value>;
   return static_cast<BitBoardType>(1)
           << (std::numeric_limits<BitBoardType>::digits - 1 - action);
 }
@@ -119,7 +128,7 @@ template <typename BitBoardType>
 inline auto positionToBoard(const std::size_t x, const std::size_t y) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   return static_cast<BitBoardType>(1) << (boardSize - 1 - (x + boardRow * y));
 }
 
@@ -127,7 +136,7 @@ template <typename BitBoardType>
 inline auto getRow(const BitBoardType board, const std::size_t i) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   using RowType = BitType<boardRow>;
   constexpr auto mask = static_cast<RowType>(~0);
   return static_cast<RowType>(
@@ -140,7 +149,7 @@ inline auto getColumn(const BitBoardType board, const std::size_t i,
                       const bool reverse=false) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardCol  = isqrt<boardSize>();
+  constexpr auto boardCol  = isqrt<boardSize>::value;
   using ColType = BitType<boardCol>;
   ColType col = 0;
   for (std::size_t j = 0; j < boardCol; j++)
@@ -155,7 +164,7 @@ template <typename BitBoardType>
 inline BitBoardType getTranspose(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   BitBoardType boardT = 0;
   for (std::size_t i = 0; i < boardRow; i++) {
     boardT <<= boardRow;
@@ -168,7 +177,7 @@ template <typename BitBoardType>
 inline BitBoardType antiClockRotate45(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   BitBoardType boardACR45T = 0;
   for (std::size_t i = 0; i < boardRow; i++) {
     boardACR45T <<= boardRow;
@@ -181,7 +190,7 @@ template <typename BitBoardType>
 inline BitBoardType clockRotate45(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   BitBoardType boardCR45T = 0;
   for (std::size_t i = 0; i < boardRow; i++) {
     boardCR45T <<= boardRow;
@@ -194,7 +203,7 @@ template <typename BitBoardType>
 inline BitBoardType antiClockRotate90(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   BitBoardType boardACR90 = 0;
   for (std::size_t i = 0; i < boardRow; i++) {
     boardACR90 <<= boardRow;
@@ -207,7 +216,7 @@ template <typename BitBoardType>
 inline BitBoardType clockRotate90(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
-  constexpr auto boardRow  = isqrt<boardSize>();
+  constexpr auto boardRow  = isqrt<boardSize>::value;
   BitBoardType boardCR90 = 0;
   for (std::size_t i = 0; i < boardRow; i++) {
     boardCR90 <<= boardRow;
