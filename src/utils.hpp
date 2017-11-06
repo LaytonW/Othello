@@ -140,15 +140,18 @@ inline auto getRow(const BitBoardType board, const std::size_t i) {
 }
 
 template <typename BitBoardType>
-inline auto getColumn(const BitBoardType board, const std::size_t i) {
+inline auto getColumn(const BitBoardType board, const std::size_t i,
+                      const bool reverse=false) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
   constexpr auto boardCol  = isqrt<boardSize>();
   using ColType = BitType<boardCol>;
   ColType col = 0;
   for (std::size_t j = 0; j < boardCol; j++)
-    col |= ((board >> (j * boardCol + boardCol - 1 - i))
-         & static_cast<ColType>(1)) << j;
+    col |= (
+      (board >> ((reverse ? boardCol-1-j : j) * boardCol + boardCol - 1 - i))
+      & static_cast<ColType>(1)
+    ) << j;
   return col;
 }
 
@@ -189,6 +192,38 @@ inline BitBoardType clockRotate45(const BitBoardType board) {
     boardCR45T |= static_cast<BitBoardType>(rotateR(getColumn(board, i), i));
   }
   return getTranspose(boardCR45T);
+}
+
+template <typename BitBoardType>
+inline BitBoardType antiClockRotate90(const BitBoardType board) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto boardRow  = isqrt<boardSize>();
+  BitBoardType boardACR90 = 0;
+  for (std::size_t i = 0; i < boardRow; i++) {
+    boardACR90 <<= boardRow;
+    boardACR90 |= static_cast<BitBoardType>(getColumn(board, boardRow - 1 - i));
+  }
+  return boardACR90;
+}
+
+template <typename BitBoardType>
+inline BitBoardType clockRotate90(const BitBoardType board) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto boardRow  = isqrt<boardSize>();
+  BitBoardType boardCR90 = 0;
+  for (std::size_t i = 0; i < boardRow; i++) {
+    boardCR90 <<= boardRow;
+    boardCR90 |= static_cast<BitBoardType>(getColumn(board, i, true));
+  }
+  return boardCR90;
+}
+
+template <typename BitBoardType>
+inline BitBoardType rotate180(const BitBoardType board) {
+  _sanityCheck<BitBoardType>();
+  return clockRotate90(clockRotate90(board));
 }
 
 #endif
