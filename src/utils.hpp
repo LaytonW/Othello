@@ -7,17 +7,13 @@
 #include <limits>
 #include <cstdint>
 
-template<std::size_t i>
-struct _BitType {
-  using type = std::conditional_t<(i <= 8), uint8_t,
-    typename std::conditional_t<(i <= 16), uint16_t,
-      typename std::conditional_t<(i <= 32), uint32_t, uint64_t>
+template <std::size_t i>
+using BitType =
+  std::conditional_t<(i <= 8), uint8_t,
+    std::conditional_t<(i <= 16), uint16_t,
+      std::conditional_t<(i <= 32), uint32_t, uint64_t>
     >
   >;
-};
-
-template <std::size_t i>
-using BitType = typename _BitType<i>::type;
 
 template <typename BitRepresentationType>
 constexpr void _sanityCheck(void) {
