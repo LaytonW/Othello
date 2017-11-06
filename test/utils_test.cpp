@@ -192,6 +192,8 @@ int main() {
                    static_cast<uint8_t>(1) << 4);
   assert(getColumn(positionToBoard<uint64_t>(3, 4), 3) ==
                    static_cast<uint8_t>(1) << 3);
+  assert(getColumn(positionToBoard<uint64_t>(3, 4), 3, true) ==
+                   static_cast<uint8_t>(1) << 4);
 
   // Test getTranspose
   assert(getTranspose(positionToBoard<uint64_t>(0, 0)) ==
@@ -231,6 +233,42 @@ int main() {
                        (positionToBoard<uint64_t>(3, 0)
                        | positionToBoard<uint64_t>(6, 7)));
 
+  // Test antiClockRotate90
+  assert(antiClockRotate90(positionToBoard<uint64_t>(0, 0)) ==
+                           positionToBoard<uint64_t>(0, 7));
+  assert(antiClockRotate90(positionToBoard<uint64_t>(0, 7)) ==
+                           positionToBoard<uint64_t>(7, 7));
+  assert(antiClockRotate90(positionToBoard<uint64_t>(2, 6)) ==
+                           positionToBoard<uint64_t>(6, 5));
+  assert(antiClockRotate90(positionToBoard<uint64_t>(3, 5)
+                           | positionToBoard<uint64_t>(6, 1)) ==
+                           (positionToBoard<uint64_t>(5, 4)
+                           | positionToBoard<uint64_t>(1, 1)));
+
+  // Test clockRotate90
+  assert(clockRotate90(positionToBoard<uint64_t>(0, 0)) ==
+                       positionToBoard<uint64_t>(7, 0));
+  assert(clockRotate90(positionToBoard<uint64_t>(0, 7)) ==
+                       positionToBoard<uint64_t>(0, 0));
+  assert(clockRotate90(positionToBoard<uint64_t>(2, 6)) ==
+                       positionToBoard<uint64_t>(1, 2));
+  assert(clockRotate90(positionToBoard<uint64_t>(3, 5)
+                       | positionToBoard<uint64_t>(6, 1)) ==
+                       (positionToBoard<uint64_t>(2, 3)
+                       | positionToBoard<uint64_t>(6, 6)));
+
+  // Test rotate180
+  assert(rotate180(positionToBoard<uint64_t>(0, 0)) ==
+                   positionToBoard<uint64_t>(7, 7));
+  assert(rotate180(positionToBoard<uint64_t>(0, 7)) ==
+                   positionToBoard<uint64_t>(7, 0));
+  assert(rotate180(positionToBoard<uint64_t>(2, 6)) ==
+                   positionToBoard<uint64_t>(5, 1));
+  assert(rotate180(positionToBoard<uint64_t>(3, 5)
+                   | positionToBoard<uint64_t>(6, 1)) ==
+                   (positionToBoard<uint64_t>(4, 2)
+                   | positionToBoard<uint64_t>(1, 6)));
+
   assert(
     antiClockRotate45(
       clockRotate45(
@@ -240,24 +278,20 @@ int main() {
   );
 
   assert(
-    clockRotate45(
-      clockRotate45(
-        clockRotate45(
-          clockRotate45(
-            clockRotate45(
-              clockRotate45(
-                clockRotate45(
-                  clockRotate45(
-                    positionToBoard<uint64_t>(3, 5)
-                    | positionToBoard<uint64_t>(6, 1)
-                  )
-                )
-              )
-            )
-          )
-        )
+    antiClockRotate90(
+      clockRotate90(
+        positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1)
       )
     ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
+  );
+
+  assert(
+      rotate180(
+        rotate180(
+          positionToBoard<uint64_t>(3, 5)
+          | positionToBoard<uint64_t>(6, 1)
+        )
+      ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
   );
 
   std::cout << "All tests passed for utils!" << std::endl;
