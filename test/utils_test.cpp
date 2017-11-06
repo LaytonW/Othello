@@ -231,6 +231,35 @@ int main() {
                        (positionToBoard<uint64_t>(3, 0)
                        | positionToBoard<uint64_t>(6, 7)));
 
+  assert(
+    antiClockRotate45(
+      clockRotate45(
+        positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1)
+      )
+    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
+  );
+
+  assert(
+    clockRotate45(
+      clockRotate45(
+        clockRotate45(
+          clockRotate45(
+            clockRotate45(
+              clockRotate45(
+                clockRotate45(
+                  clockRotate45(
+                    positionToBoard<uint64_t>(3, 5)
+                    | positionToBoard<uint64_t>(6, 1)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
+  );
+
   std::cout << "All tests passed for utils!" << std::endl;
   return 0;
 }
