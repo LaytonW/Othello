@@ -22,6 +22,9 @@ TEST_CXXFLAGS := -std=c++14 -Og -ggdb -D DEBUG -Wall -Werror -I$(SRCDIR)
 all : $(OBJECTS)
 test: all $(TEST_OBJECTS)
 
+test_run: test
+	$(foreach t,$(TEST_OBJECTS),./$(t);)
+
 $(AUXDIR) :
 	$(MKDIR) $@
 

@@ -1,0 +1,146 @@
+#include <iostream>
+#include <type_traits>
+#include <limits>
+#include <cstdint>
+#include <cassert>
+
+#include "utils.hpp"
+
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
+#ifndef DEBUG
+#define DEBUG
+#endif
+
+int main() {
+  // Test BitType
+  static_assert(std::is_same<BitType<0>, uint8_t>::value,
+                "BitType<0> should be uint8_t!");
+  static_assert(std::is_same<BitType<1>, uint8_t>::value,
+                "BitType<1> should be uint8_t!");
+  static_assert(std::is_same<BitType<7>, uint8_t>::value,
+                "BitType<7> should be uint8_t!");
+  static_assert(std::is_same<BitType<8>, uint8_t>::value,
+                "BitType<8> should be uint8_t!");
+  static_assert(std::is_same<BitType<9>, uint16_t>::value,
+                "BitType<9> should be uint16_t!");
+  static_assert(std::is_same<BitType<10>, uint16_t>::value,
+                "BitType<10> should be uint16_t!");
+  static_assert(std::is_same<BitType<15>, uint16_t>::value,
+                "BitType<15> should be uint16_t!");
+  static_assert(std::is_same<BitType<16>, uint16_t>::value,
+                "BitType<16> should be uint16_t!");
+  static_assert(std::is_same<BitType<17>, uint32_t>::value,
+                "BitType<17> should be uint32_t!");
+  static_assert(std::is_same<BitType<18>, uint32_t>::value,
+                "BitType<18> should be uint32_t!");
+  static_assert(std::is_same<BitType<31>, uint32_t>::value,
+                "BitType<31> should be uint32_t!");
+  static_assert(std::is_same<BitType<32>, uint32_t>::value,
+                "BitType<32> should be uint32_t!");
+  static_assert(std::is_same<BitType<33>, uint64_t>::value,
+                "BitType<33> should be uint64_t!");
+  static_assert(std::is_same<BitType<34>, uint64_t>::value,
+                "BitType<34> should be uint64_t!");
+  static_assert(std::is_same<BitType<63>, uint64_t>::value,
+                "BitType<63> should be uint64_t!");
+  static_assert(std::is_same<BitType<64>, uint64_t>::value,
+                "BitType<64> should be uint64_t!");
+
+  // Test isPowerOf2
+  static_assert(not isPowerOf2(0ull), "0 is not power of 2!");
+  static_assert(isPowerOf2(1ull), "1 is power of 2!");
+  static_assert(isPowerOf2(2ull), "2 is power of 2!");
+  static_assert(not isPowerOf2(3ull), "3 is not power of 2!");
+  static_assert(isPowerOf2(4ull), "4 is power of 2!");
+  static_assert(isPowerOf2(64ull), "64 is power of 2!");
+
+  // Test removeLastOne
+  assert(removeLastOne(0ull) == 0);
+  assert(removeLastOne(1ull) == 0);
+  assert(removeLastOne(2ull) == 0);
+  assert(removeLastOne(3ull) == 2);
+  assert(removeLastOne(4ull) == 0);
+  assert(removeLastOne(5ull) == 4);
+  assert(removeLastOne(7ull) == 6);
+  assert(removeLastOne(64ull) == 0);
+
+  // Test countOnes
+  assert(countOnes(0ull) == 0);
+  assert(countOnes(1ull) == 1);
+  assert(countOnes(2ull) == 1);
+  assert(countOnes(3ull) == 2);
+  assert(countOnes(4ull) == 1);
+  assert(countOnes(5ull) == 2);
+  assert(countOnes(7ull) == 3);
+  assert(countOnes(63ull) == 6);
+  assert(countOnes(85ull) == 4);
+
+  // Test isqrt
+  static_assert(isqrt<1>() == 1, "isqrt<1>() should be 1!");
+  static_assert(isqrt<4>() == 2, "isqrt<4>() should be 2!");
+  static_assert(isqrt<16>() == 4, "isqrt<16>() should be 4!");
+  static_assert(isqrt<64>() == 8, "isqrt<64>() should be 8!");
+  static_assert(isqrt<256>() == 16, "isqrt<256>() should be 16!");
+
+  // Test pow2
+  static_assert(pow2<1>() == 1, "pow2<1>() should be 1!");
+  static_assert(pow2<2>() == 4, "pow2<2>() should be 4!");
+  static_assert(pow2<4>() == 16, "pow2<4>() should be 16!");
+  static_assert(pow2<8>() == 64, "pow2<8>() should be 64!");
+  static_assert(pow2<16>() == 256, "pow2<16>() should be 256!");
+
+  // Test positionToAction
+  assert(positionToAction<uint8_t>(0, 0) == 0);
+  assert(positionToAction<uint8_t>(1, 0) == 1);
+  assert(positionToAction<uint8_t>(7, 0) == 7);
+  assert(positionToAction<uint8_t>(0, 1) == 8);
+  assert(positionToAction<uint8_t>(0, 7) == 56);
+  assert(positionToAction<uint8_t>(3, 3) == 27);
+  assert(positionToAction<uint8_t>(4, 3) == 28);
+  assert(positionToAction<uint8_t>(3, 4) == 35);
+  assert(positionToAction<uint8_t>(4, 4) == 36);
+
+  // Test actionToBoard
+  static_assert(std::is_same<decltype(actionToBoard(static_cast<uint8_t>(0))),
+                             uint64_t>::value,
+                "uint8_t action should result in uint64_t board!");
+  assert(actionToBoard(static_cast<uint8_t>(0)) ==
+                       static_cast<uint64_t>(1) << 63);
+  assert(actionToBoard(static_cast<uint8_t>(1)) ==
+                       static_cast<uint64_t>(1) << 62);
+  assert(actionToBoard(static_cast<uint8_t>(7)) ==
+                       static_cast<uint64_t>(1) << 56);
+  assert(actionToBoard(static_cast<uint8_t>(56)) ==
+                       static_cast<uint64_t>(1) << 7);
+  assert(actionToBoard(static_cast<uint8_t>(36)) ==
+                       static_cast<uint64_t>(1) << 27);
+
+  // Test positionToBoard
+  static_assert(std::is_same<decltype(positionToBoard<uint64_t>(0, 0)),
+                             uint64_t>::value,
+                "positionToBoard<uint64_t> should result in uint64_t board!");
+  assert(positionToBoard<uint64_t>(0, 0) == static_cast<uint64_t>(1) << 63);
+  assert(positionToBoard<uint64_t>(1, 0) == static_cast<uint64_t>(1) << 62);
+  assert(positionToBoard<uint64_t>(7, 0) == static_cast<uint64_t>(1) << 56);
+  assert(positionToBoard<uint64_t>(0, 7) == static_cast<uint64_t>(1) << 7);
+  assert(positionToBoard<uint64_t>(4, 4) == static_cast<uint64_t>(1) << 27);
+
+  // Test getRow
+  static_assert(std::is_same<decltype(getRow(static_cast<uint64_t>(0), 0)),
+                             uint8_t>::value,
+                "uint64_t board should has uint8_t rows!");
+  assert(getRow(positionToBoard<uint64_t>(0, 0), 0) ==
+                static_cast<uint8_t>(1) << 7);
+  assert(getRow(positionToBoard<uint64_t>(0, 0), 1) ==
+                static_cast<uint8_t>(0));
+  assert(getRow(positionToBoard<uint64_t>(3, 3), 0) ==
+                static_cast<uint8_t>(0));
+  assert(getRow(positionToBoard<uint64_t>(3, 3), 3) ==
+                static_cast<uint8_t>(1) << 4);
+
+  std::cout << "All tests passed for utils!" << std::endl;
+  return 0;
+}
