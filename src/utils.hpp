@@ -8,13 +8,16 @@
 #include <cstdint>
 
 template<std::size_t i>
-struct BitType {
-  using type = typename std::conditional<(i <= 8), uint8_t,
-    typename std::conditional<(i <= 16), uint16_t,
-      typename std::conditional<(i <= 32), uint32_t, uint64_t>::type
-    >::type
-  >::type;
+struct _BitType {
+  using type = std::conditional_t<(i <= 8), uint8_t,
+    typename std::conditional_t<(i <= 16), uint16_t,
+      typename std::conditional_t<(i <= 32), uint32_t, uint64_t>
+    >
+  >;
 };
+
+template <std::size_t i>
+using BitType = typename _BitType<i>::type;
 
 template <typename BitRepresentationType>
 constexpr void _sanityCheck(void) {
@@ -81,8 +84,7 @@ inline ActionType positionToAction(const std::size_t x, const std::size_t y) {
 template <typename ActionType>
 inline auto actionToBoard(const ActionType action) {
   _sanityCheck<ActionType>();
-  using BitBoardType = typename
-    BitType<pow2<std::numeric_limits<ActionType>::digits>()>::type;
+  using BitBoardType = BitType<pow2<std::numeric_limits<ActionType>::digits>()>;
   return static_cast<BitBoardType>(1)
           << (std::numeric_limits<BitBoardType>::digits - 1 - action);
 }
@@ -100,7 +102,7 @@ inline auto getRow(const BitBoardType board, const std::size_t i) {
   _sanityCheck<BitBoardType>();
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
   constexpr auto boardRow  = isqrt<boardSize>();
-  using RowType = typename BitType<boardRow>::type;
+  using RowType = BitType<boardRow>;
   constexpr auto mask = static_cast<RowType>(~0);
   return (board >> ((boardRow - 1 - i) * boardRow)) & mask;
 }
