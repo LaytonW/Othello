@@ -12,7 +12,7 @@ OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 TEST_SOURCES := $(wildcard $(TESTDIR)/*.cpp)
 TEST_OBJECTS := $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(BINDIR)/%)
 
-MKDIR := mkdir -p
+MKDIR := mkdir
 RM    := rm -rf
 
 CXX      ?= g++
