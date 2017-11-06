@@ -116,18 +116,18 @@ int main() {
   assert(rotateR(static_cast<uint8_t>(0b0000'0100), 16) == 0b0000'0100);
 
   // Test isqrt
-  static_assert(isqrt<1>() == 1, "isqrt<1>() should be 1!");
-  static_assert(isqrt<4>() == 2, "isqrt<4>() should be 2!");
-  static_assert(isqrt<16>() == 4, "isqrt<16>() should be 4!");
-  static_assert(isqrt<64>() == 8, "isqrt<64>() should be 8!");
-  static_assert(isqrt<256>() == 16, "isqrt<256>() should be 16!");
+  static_assert(isqrt<1>::value == 1, "isqrt<1>::value should be 1!");
+  static_assert(isqrt<4>::value == 2, "isqrt<4>::value should be 2!");
+  static_assert(isqrt<16>::value == 4, "isqrt<16>::value should be 4!");
+  static_assert(isqrt<64>::value == 8, "isqrt<64>::value should be 8!");
+  static_assert(isqrt<256>::value == 16, "isqrt<256>::value should be 16!");
 
   // Test pow2
-  static_assert(pow2<1>() == 1, "pow2<1>() should be 1!");
-  static_assert(pow2<2>() == 4, "pow2<2>() should be 4!");
-  static_assert(pow2<4>() == 16, "pow2<4>() should be 16!");
-  static_assert(pow2<8>() == 64, "pow2<8>() should be 64!");
-  static_assert(pow2<16>() == 256, "pow2<16>() should be 256!");
+  static_assert(pow2<1>::value == 1, "pow2<1>::value should be 1!");
+  static_assert(pow2<2>::value == 4, "pow2<2>::value should be 4!");
+  static_assert(pow2<4>::value == 16, "pow2<4>::value should be 16!");
+  static_assert(pow2<8>::value == 64, "pow2<8>::value should be 64!");
+  static_assert(pow2<16>::value == 256, "pow2<16>::value should be 256!");
 
   // Test positionToAction
   assert(positionToAction<uint8_t>(0, 0) == 0);
