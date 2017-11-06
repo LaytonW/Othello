@@ -278,12 +278,12 @@ int main() {
   );
 
   assert(
+    rotate180(
       rotate180(
-        rotate180(
-          positionToBoard<uint64_t>(3, 5)
-          | positionToBoard<uint64_t>(6, 1)
-        )
-      ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
+        positionToBoard<uint64_t>(3, 5)
+        | positionToBoard<uint64_t>(6, 1)
+      )
+    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
   );
 
   std::cout << "All tests passed for utils!" << std::endl;
