@@ -104,7 +104,9 @@ inline auto getRow(const BitBoardType board, const std::size_t i) {
   constexpr auto boardRow  = isqrt<boardSize>();
   using RowType = BitType<boardRow>;
   constexpr auto mask = static_cast<RowType>(~0);
-  return (board >> ((boardRow - 1 - i) * boardRow)) & mask;
+  return static_cast<RowType>(
+    (board >> ((boardRow - 1 - i) * boardRow)) & mask
+  );
 }
 
 #endif
