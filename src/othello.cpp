@@ -1,7 +1,14 @@
+#include <limits>
+
 #include "utils.hpp"
 #include "othello.hpp"
 
 using namespace Othello;
+
+using OthelloRow =
+  BitType<isqrt<std::numeric_limits<OthelloBitBoard>::digits>::value>;
+
+constexpr auto othelloRowSize = std::numeric_limits<OthelloRow>::digits;
 
 constexpr std::size_t indexOf(const OthelloPlayer player) {
   return player == black ? 0 : 1;
@@ -18,9 +25,24 @@ OthelloGame::~OthelloGame() {}
 
 const OthelloAction OthelloGame::getActions(const OthelloState& state,
                                             const OthelloPlayer player) const {
-  // TODO
-  // auto blackBitBoard = std::get<indexOf(black)>(state);
-  // auto whiteBitBoard = std::get<indexOf(white)>(state);
+  // OthelloBitBoard playerBoard, opponentBoard;
+  //
+  // if (player == black) {
+  //   playerBoard   = std::get<indexOf(black)>(state);
+  //   opponentBoard = std::get<indexOf(white)>(state);
+  // } else {
+  //   playerBoard   = std::get<indexOf(white)>(state);
+  //   opponentBoard = std::get<indexOf(black)>(state);
+  // }
+  //
+  // auto clockRotate45PlayerBoard   = clockRotate45(playerBoard);
+  // auto clockRotate45OpponentBoard = clockRotate45(opponentBoard);
+  //
+  // for (std::size_t i = 0; i < othelloRowSize; i++) {
+  //   auto upperMask = static_cast<OthelloRow>(1) << (othelloRowSize - 1 - i);
+  //   auto lowerMask = ~upperMask;
+  // }
+
   return 0;
 }
 
