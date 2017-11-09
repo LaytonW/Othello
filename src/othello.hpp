@@ -22,6 +22,7 @@ namespace Othello {
 
   public:
     OthelloGame();
+    const OthelloState getState(void) const override;
     const OthelloMoves getMoves(const OthelloState&,
                                 const OthelloPlayer) const override;
     const OthelloState getResult(const OthelloState&,

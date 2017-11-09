@@ -21,6 +21,10 @@ OthelloGame::OthelloGame() {
   this->whiteBitBoard |= positionToBoard<OthelloBitBoard>(4, 4);
 }
 
+const OthelloState OthelloGame::getState(void) const {
+  return std::make_tuple(this->blackBitBoard, this->whiteBitBoard);
+}
+
 const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
                                          const OthelloPlayer player) const {
   OthelloBitBoard moves = 0;

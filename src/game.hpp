@@ -11,6 +11,7 @@ public:
   Game& operator=(const Game&) = default;
   Game(Game&&) = default;
   Game& operator=(Game&&) = default;
+  virtual const StateType getState(void) const = 0;
   virtual const MoveType getMoves(const StateType&,
                                   const PlayerType) const = 0;
   virtual const StateType getResult(const StateType&,
