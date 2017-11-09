@@ -120,21 +120,6 @@ struct pow2 {
   static constexpr std::size_t value = _value();
 };
 
-template <typename ActionType>
-inline ActionType positionToAction(const std::size_t x, const std::size_t y) {
-  _sanityCheck<ActionType>();
-  return x + std::numeric_limits<ActionType>::digits * y;
-}
-
-template <typename ActionType>
-inline auto actionToBoard(const ActionType action) {
-  _sanityCheck<ActionType>();
-  using BitBoardType =
-    BitType<pow2<std::numeric_limits<ActionType>::digits>::value>;
-  return static_cast<BitBoardType>(1)
-          << (std::numeric_limits<BitBoardType>::digits - 1 - action);
-}
-
 template <typename BitBoardType>
 inline auto positionToBoard(const std::size_t x, const std::size_t y) {
   _sanityCheck<BitBoardType>();

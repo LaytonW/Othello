@@ -2,7 +2,7 @@
 #define __GAME_HPP__
 
 template
- <typename StateType,   typename ActionType,
+ <typename StateType,   typename MoveType,
   typename UtilityType, typename PlayerType>
 class Game {
 public:
@@ -11,13 +11,13 @@ public:
   Game& operator=(const Game&) = default;
   Game(Game&&) = default;
   Game& operator=(Game&&) = default;
-  virtual const ActionType getActions(const StateType&,
-                                      const PlayerType) const = 0;
+  virtual const MoveType getMoves(const StateType&,
+                                  const PlayerType) const = 0;
   virtual const StateType getResult(const StateType&,
                                     const PlayerType,
-                                    const ActionType) const = 0;
-  virtual void applyAction(const StateType&,
-                           const ActionType) = 0;
+                                    const MoveType) const = 0;
+  virtual void applyMoves(const StateType&,
+                          const MoveType) = 0;
   virtual const UtilityType getUtility(const StateType&,
                                        const PlayerType) const = 0;
   virtual const bool isTerminal(const StateType&) const = 0;

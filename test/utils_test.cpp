@@ -138,32 +138,6 @@ int main() {
   static_assert(pow2<8>::value == 64, "pow2<8>::value should be 64!");
   static_assert(pow2<16>::value == 256, "pow2<16>::value should be 256!");
 
-  // Test positionToAction
-  assert(positionToAction<uint8_t>(0, 0) == 0);
-  assert(positionToAction<uint8_t>(1, 0) == 1);
-  assert(positionToAction<uint8_t>(7, 0) == 7);
-  assert(positionToAction<uint8_t>(0, 1) == 8);
-  assert(positionToAction<uint8_t>(0, 7) == 56);
-  assert(positionToAction<uint8_t>(3, 3) == 27);
-  assert(positionToAction<uint8_t>(4, 3) == 28);
-  assert(positionToAction<uint8_t>(3, 4) == 35);
-  assert(positionToAction<uint8_t>(4, 4) == 36);
-
-  // Test actionToBoard
-  static_assert(std::is_same<decltype(actionToBoard(static_cast<uint8_t>(0))),
-                             uint64_t>::value,
-                "uint8_t action should result in uint64_t board!");
-  assert(actionToBoard(static_cast<uint8_t>(0)) ==
-                       static_cast<uint64_t>(1) << 63);
-  assert(actionToBoard(static_cast<uint8_t>(1)) ==
-                       static_cast<uint64_t>(1) << 62);
-  assert(actionToBoard(static_cast<uint8_t>(7)) ==
-                       static_cast<uint64_t>(1) << 56);
-  assert(actionToBoard(static_cast<uint8_t>(56)) ==
-                       static_cast<uint64_t>(1) << 7);
-  assert(actionToBoard(static_cast<uint8_t>(36)) ==
-                       static_cast<uint64_t>(1) << 27);
-
   // Test positionToBoard
   static_assert(std::is_same<decltype(positionToBoard<uint64_t>(0, 0)),
                              uint64_t>::value,

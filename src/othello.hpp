@@ -9,11 +9,11 @@
 namespace Othello {
   using OthelloBitBoard = uint64_t;
   using OthelloUtility  = int8_t; // Win, lose, or tie
-  using OthelloAction   = uint8_t;
+  using OthelloMoves    = OthelloBitBoard;
   using OthelloState    = std::tuple<OthelloBitBoard, OthelloBitBoard>;
   enum  OthelloPlayer { black = -1, white = 1 };
 
-  class OthelloGame final: Game <OthelloState, OthelloAction,
+  class OthelloGame final: Game <OthelloState, OthelloMoves,
                                  OthelloUtility, OthelloPlayer> {
   private:
     OthelloBitBoard blackBitBoard = 0;
@@ -22,13 +22,13 @@ namespace Othello {
 
   public:
     OthelloGame();
-    const OthelloAction getActions(const OthelloState&,
-                                   const OthelloPlayer) const override;
+    const OthelloMoves getMoves(const OthelloState&,
+                                const OthelloPlayer) const override;
     const OthelloState getResult(const OthelloState&,
                                  const OthelloPlayer,
-                                 const OthelloAction) const override;
-    void applyAction(const OthelloState&,
-                     const OthelloAction) override;
+                                 const OthelloMoves) const override;
+    void applyMoves(const OthelloState&,
+                    const OthelloMoves) override;
     const OthelloUtility getUtility(const OthelloState&,
                                     const OthelloPlayer) const override;
     const bool isTerminal(const OthelloState&) const override;
