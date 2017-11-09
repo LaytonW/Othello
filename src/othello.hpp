@@ -28,8 +28,8 @@ namespace Othello {
     const OthelloState getResult(const OthelloState&,
                                  const OthelloPlayer,
                                  const OthelloMoves) const override;
-    void applyMoves(const OthelloState&,
-                    const OthelloMoves) override;
+    void applyMove(const OthelloState&,
+                   const OthelloMoves) override;
     const OthelloUtility getUtility(const OthelloState&,
                                     const OthelloPlayer) const override;
     const bool isTerminal(const OthelloState&) const override;

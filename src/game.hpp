@@ -17,8 +17,8 @@ public:
   virtual const StateType getResult(const StateType&,
                                     const PlayerType,
                                     const MoveType) const = 0;
-  virtual void applyMoves(const StateType&,
-                          const MoveType) = 0;
+  virtual void applyMove(const StateType&,
+                         const MoveType) = 0;
   virtual const UtilityType getUtility(const StateType&,
                                        const PlayerType) const = 0;
   virtual const bool isTerminal(const StateType&) const = 0;

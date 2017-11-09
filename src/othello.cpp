@@ -373,14 +373,15 @@ const OthelloState OthelloGame::getResult(const OthelloState& state,
   return std::make_tuple(blackBitBoard, whiteBitBoard);
 }
 
-void OthelloGame::applyMoves(const OthelloState& state,
-                             const OthelloMoves  moves) {
+void OthelloGame::applyMove(const OthelloState& state,
+                            const OthelloMoves  move) {
   this->blackBitBoard = std::get<indexOf(black)>(state);
   this->whiteBitBoard = std::get<indexOf(white)>(state);
+  // TODO: flip opponent tokens
   if (this->currentPlayer == black)
-    blackBitBoard |= moves;
+    blackBitBoard |= move;
   else
-    whiteBitBoard |= moves;
+    whiteBitBoard |= move;
   this->currentPlayer = static_cast<OthelloPlayer>(-this->currentPlayer);
 }
 
@@ -395,7 +396,8 @@ OthelloGame::getUtility(const OthelloState& state,
 }
 
 const bool OthelloGame::isTerminal(const OthelloState& state) const {
-  bool filled = (this->blackBitBoard | this->whiteBitBoard) == ~0ull;
+  bool filled = (this->blackBitBoard | this->whiteBitBoard) ==
+    ~static_cast<OthelloBitBoard>(0);
   bool noMove = this->getMoves(state, black) == 0 and
                 this->getMoves(state, white) == 0;
   return filled or noMove;
