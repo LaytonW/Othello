@@ -33,7 +33,7 @@ namespace Othello {
                                     const OthelloPlayer) const override;
     const bool isTerminal(const OthelloState&) const override;
     const OthelloPlayer getPlayer(void) const override;
-    ~OthelloGame();
+    ~OthelloGame() = default;
   };
 }
 

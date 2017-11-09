@@ -6,7 +6,7 @@ template
   typename UtilityType, typename PlayerType>
 class Game {
 public:
-  Game();
+  Game() = default;
   Game(const Game&) = default;
   Game& operator=(const Game&) = default;
   Game(Game&&) = default;
@@ -22,7 +22,7 @@ public:
                                        const PlayerType) const = 0;
   virtual const bool isTerminal(const StateType&) const = 0;
   virtual const PlayerType getPlayer(void) const = 0;
-  virtual ~Game() = 0;
+  ~Game() = default;
 };
 
 #endif

@@ -21,8 +21,6 @@ OthelloGame::OthelloGame() {
   this->whiteBitBoard |= positionToBoard<OthelloBitBoard>(4, 4);
 }
 
-OthelloGame::~OthelloGame() {}
-
 const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
                                          const OthelloPlayer player) const {
   OthelloBitBoard moves = 0;
