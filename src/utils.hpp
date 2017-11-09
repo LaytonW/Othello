@@ -42,6 +42,17 @@ inline BitStringType extractLastOne(const BitStringType x) {
 }
 
 template <typename BitStringType>
+inline BitStringType extractFirstOne(const BitStringType x) {
+  _sanityCheck<BitStringType>();
+  if (x == 0)
+    return 0;
+  auto tmp = x;
+  while (not isPowerOf2(tmp))
+    tmp = removeLastOne(tmp);
+  return tmp;
+}
+
+template <typename BitStringType>
 inline BitStringType fillTail(const BitStringType x) {
   _sanityCheck<BitStringType>();
   return x | (x - 1);

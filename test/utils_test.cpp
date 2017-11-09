@@ -76,6 +76,16 @@ int main() {
   assert(extractLastOne(0b0111ull) == 0b0001ull);
   assert(extractLastOne(0b0100'0000ull) == 0b0100'0000ull);
 
+  // Test extractFirstOne
+  assert(extractFirstOne(0b00ull) == 0b00ull);
+  assert(extractFirstOne(0b01ull) == 0b01ull);
+  assert(extractFirstOne(0b10ull) == 0b10ull);
+  assert(extractFirstOne(0b11ull) == 0b10ull);
+  assert(extractFirstOne(0b0100ull) == 0b0100ull);
+  assert(extractFirstOne(0b0110ull) == 0b0100ull);
+  assert(extractFirstOne(0b0111ull) == 0b0100ull);
+  assert(extractFirstOne(0b0101'0101ull) == 0b0100'0000ull);
+
   // Test fillTail
   assert(fillTail(0b01ull) == 0b01ull);
   assert(fillTail(0b10ull) == 0b11ull);
