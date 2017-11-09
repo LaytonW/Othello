@@ -31,7 +31,7 @@ $(AUXDIR) :
 $(OBJECTS) : $(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(OBJDIR)
 	$(CXX) -c -o $@ $^ $(CXXFLAGS)
 
-$(TEST_OBJECTS) : $(BINDIR)/% : $(TESTDIR)/%.cpp | $(BINDIR)
+$(TEST_OBJECTS) : $(BINDIR)/% : $(TESTDIR)/%.cpp $(OBJECTS) | $(BINDIR)
 	$(CXX) -o $@ $^ $(TEST_CXXFLAGS)
 
 clean :
