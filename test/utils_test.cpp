@@ -95,6 +95,12 @@ int main() {
   assert(fillTail(0b0111ull) == 0b0111ull);
   assert(fillTail(0b0100'0000ull) == 0b0111'1111ull);
 
+  // Test fillBetween
+  assert(fillBetween(0b101ull) == 0b010ull);
+  assert(fillBetween(0b1001ull) == 0b0110ull);
+  assert(fillBetween(0b11ull) == 0b0ull);
+  assert(fillBetween(0b0100'0001ull) == 0b0011'1110ull);
+
   // Test countOnes
   assert(countOnes(0b00ull) == 0);
   assert(countOnes(0b01ull) == 1);
@@ -284,6 +290,83 @@ int main() {
         | positionToBoard<uint64_t>(6, 1)
       )
     ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
+  );
+
+  // Test setRow
+  assert(setRow(
+    positionToBoard<uint64_t>(0, 0),
+    0, getRow(positionToBoard<uint64_t>(1, 0), 0))
+    == positionToBoard<uint64_t>(1, 0)
+  );
+  assert(setRow(
+    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
+    1, getRow(positionToBoard<uint64_t>(0, 0), 0))
+    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(0, 1))
+  );
+  assert(setRow(
+    positionToBoard<uint64_t>(0, 0),
+    7, getRow(positionToBoard<uint64_t>(0, 0), 0))
+    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(0, 7))
+  );
+
+  // Test setCol
+  assert(setCol(
+    positionToBoard<uint64_t>(0, 0),
+    0, getColumn(positionToBoard<uint64_t>(0, 1), 0))
+    == positionToBoard<uint64_t>(0, 1)
+  );
+  assert(setCol(
+    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
+    1, getRow(positionToBoard<uint64_t>(0, 0), 0))
+    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 0))
+  );
+  assert(setCol(
+    positionToBoard<uint64_t>(0, 0),
+    7, getRow(positionToBoard<uint64_t>(4, 3), 3))
+    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(7, 4))
+  );
+
+  // Test setDiag
+  assert(setDiag(
+    positionToBoard<uint64_t>(0, 0),
+    0, getRow(positionToBoard<uint64_t>(7, 0), 0))
+    == positionToBoard<uint64_t>(7, 7)
+  );
+  assert(setDiag(
+    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
+    0, getRow(positionToBoard<uint64_t>(0, 0), 0))
+    == positionToBoard<uint64_t>(0, 0)
+  );
+  assert(setDiag(
+    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
+    6, static_cast<uint8_t>(1 << 7 | 1 << 6))
+    == (positionToBoard<uint64_t>(0, 0)
+        | positionToBoard<uint64_t>(1, 1)
+        | positionToBoard<uint64_t>(0, 6)
+        | positionToBoard<uint64_t>(1, 7))
+  );
+  assert(setDiag(
+    positionToBoard<uint64_t>(0, 7) | positionToBoard<uint64_t>(1, 6),
+    6, static_cast<uint8_t>(1 << 7 | 1 << 6))
+    == (positionToBoard<uint64_t>(0, 7)
+        | positionToBoard<uint64_t>(1, 6)
+        | positionToBoard<uint64_t>(0, 6)
+        | positionToBoard<uint64_t>(1, 7))
+  );
+
+  // Test setAntiDiag
+  assert(setAntiDiag(
+    positionToBoard<uint64_t>(0, 0),
+    7, getRow(positionToBoard<uint64_t>(7, 0), 0))
+    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(7, 0))
+  );
+  assert(setAntiDiag(
+    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
+    1, static_cast<uint8_t>(1 << 7 | 1 << 6))
+    == (positionToBoard<uint64_t>(0, 0)
+        | positionToBoard<uint64_t>(1, 1)
+        | positionToBoard<uint64_t>(0, 1)
+        | positionToBoard<uint64_t>(1, 0))
   );
 
   std::cout << "All tests passed for utils!" << std::endl;

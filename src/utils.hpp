@@ -59,6 +59,13 @@ inline BitStringType fillTail(const BitStringType x) {
 }
 
 template <typename BitStringType>
+inline BitStringType fillBetween(const BitStringType x) {
+  _sanityCheck<BitStringType>();
+  return fillTail(static_cast<BitStringType>(extractFirstOne(x) >> 1))
+         ^ fillTail(static_cast<BitStringType>(extractLastOne(x)));
+}
+
+template <typename BitStringType>
 inline std::size_t countOnes(const BitStringType x) {
   _sanityCheck<BitStringType>();
   auto tmp = x;
@@ -134,7 +141,7 @@ inline auto getRow(const BitBoardType board, const std::size_t i) {
   constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
   constexpr auto boardRow  = isqrt<boardSize>::value;
   using RowType = BitType<boardRow>;
-  constexpr auto mask = static_cast<RowType>(~0);
+  constexpr auto mask = ~static_cast<RowType>(0);
   return static_cast<RowType>(
     (board >> ((boardRow - 1 - i) * boardRow)) & mask
   );
@@ -153,7 +160,7 @@ inline auto getColumn(const BitBoardType board, const std::size_t i,
       (board >> ((reverse ? boardCol-1-j : j) * boardCol + boardCol - 1 - i))
       & static_cast<ColType>(1)
     ) << j;
-  return col;
+  return static_cast<ColType>(col);
 }
 
 template <typename BitStringType>
@@ -253,6 +260,60 @@ template <typename BitBoardType>
 inline BitBoardType rotate180(const BitBoardType board) {
   _sanityCheck<BitBoardType>();
   return clockRotate90(clockRotate90(board));
+}
+
+template <typename BitBoardType, typename RowType>
+inline auto setRow(const BitBoardType board,
+                   const std::size_t rowNum,
+                   const RowType row) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto rowSize  = isqrt<boardSize>::value;
+  static_assert(std::numeric_limits<RowType>::digits == rowSize,
+    "BitBoardType and RowType mismatch!");
+  const auto mask = static_cast<BitBoardType>(static_cast<RowType>(~0));
+  BitBoardType res = board & ~(mask << ((rowSize - rowNum - 1) * rowSize));
+  res |= static_cast<BitBoardType>(row) << ((rowSize - rowNum - 1) * rowSize);
+  return res;
+}
+
+template <typename BitBoardType, typename ColType>
+inline auto setCol(const BitBoardType board,
+                   const std::size_t colNum,
+                   const ColType col) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto colSize  = isqrt<boardSize>::value;
+  static_assert(std::numeric_limits<ColType>::digits == colSize,
+    "BitBoardType and ColType mismatch!");
+  BitBoardType res = setRow(getTranspose(board), colNum, col);
+  return getTranspose(res);
+}
+
+template <typename BitBoardType, typename DiagType>
+inline auto setDiag(const BitBoardType board,
+                    const std::size_t diagNum,
+                    const DiagType diag) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto diagSize  = isqrt<boardSize>::value;
+  static_assert(std::numeric_limits<DiagType>::digits == diagSize,
+    "BitBoardType and DiagType mismatch!");
+  BitBoardType res = setRow(antiClockRotate45(board), diagNum, diag);
+  return clockRotate45(res);
+}
+
+template <typename BitBoardType, typename DiagType>
+inline auto setAntiDiag(const BitBoardType board,
+                        const std::size_t antiDiagNum,
+                        const DiagType antiDiag) {
+  _sanityCheck<BitBoardType>();
+  constexpr auto boardSize = std::numeric_limits<BitBoardType>::digits;
+  constexpr auto diagSize  = isqrt<boardSize>::value;
+  static_assert(std::numeric_limits<DiagType>::digits == diagSize,
+    "BitBoardType and DiagType mismatch!");
+  BitBoardType res = setRow(clockRotate45(board), antiDiagNum, antiDiag);
+  return antiClockRotate45(res);
 }
 
 #endif
