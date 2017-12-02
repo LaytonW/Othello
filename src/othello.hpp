@@ -13,7 +13,7 @@ namespace Othello {
   using OthelloState    = std::tuple<OthelloBitBoard, OthelloBitBoard>;
   enum  OthelloPlayer { black = -1, white = 1 };
 
-  class OthelloGame final: Game <OthelloState, OthelloMoves,
+  class OthelloGame final: public Game <OthelloState, OthelloMoves,
                                  OthelloUtility, OthelloPlayer> {
   private:
     OthelloBitBoard blackBitBoard = 0;
@@ -23,17 +23,16 @@ namespace Othello {
   public:
     OthelloGame();
     const OthelloState getState(void) const override;
-    const OthelloMoves getMoves(const OthelloState&,
-                                const OthelloPlayer) const override;
-    const OthelloState getResult(const OthelloState&,
-                                 const OthelloPlayer,
-                                 const OthelloMoves) const override;
-    void applyMove(const OthelloState&,
-                   const OthelloMoves) override;
-    const OthelloUtility getUtility(const OthelloState&,
-                                    const OthelloPlayer) const override;
-    const bool isTerminal(const OthelloState&) const override;
+    void applyMove(const OthelloState&, const OthelloMoves) override;
     const OthelloPlayer getPlayer(void) const override;
+    static const OthelloMoves getMoves(const OthelloState&,
+                                       const OthelloPlayer);
+    static const OthelloState getResult(const OthelloState&,
+                                        const OthelloPlayer,
+                                        const OthelloMoves);
+    static const OthelloUtility getUtility(const OthelloState&,
+                                           const OthelloPlayer);
+    static const bool isTerminal(const OthelloState&);
     ~OthelloGame() = default;
   };
 }

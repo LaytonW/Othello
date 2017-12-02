@@ -36,7 +36,7 @@ int main() {
   assert(othelloGame.getPlayer() == black);
 
   // Test getResult
-  const auto result1 = othelloGame.getResult(
+  const auto result1 = OthelloGame::getResult(
     othelloGame.getState(), othelloGame.getPlayer(),
     positionToBoard<OthelloMoves>(0, 0)
   );
@@ -47,7 +47,7 @@ int main() {
   assert(std::get<1>(result1) ==
     (positionToBoard<OthelloBitBoard>(3, 3)
     | positionToBoard<OthelloBitBoard>(4, 4)));
-  const auto result2 = othelloGame.getResult(
+  const auto result2 = OthelloGame::getResult(
     result1, white,
     positionToBoard<OthelloMoves>(5, 2)
   );
@@ -61,7 +61,7 @@ int main() {
     | positionToBoard<OthelloBitBoard>(5, 2)));
 
   // Test getMoves and applyMove
-  const auto moves1 = othelloGame.getMoves(
+  const auto moves1 = OthelloGame::getMoves(
     othelloGame.getState(), othelloGame.getPlayer()
   );
   assert(moves1 ==
@@ -69,7 +69,7 @@ int main() {
     | positionToBoard<OthelloMoves>(3, 2)
     | positionToBoard<OthelloMoves>(4, 5)
     | positionToBoard<OthelloMoves>(5, 4)));
-  const auto moves2 = othelloGame.getMoves(
+  const auto moves2 = OthelloGame::getMoves(
     std::make_tuple(
       positionToBoard<OthelloBitBoard>(3, 3),
       positionToBoard<OthelloBitBoard>(4, 4)
@@ -77,7 +77,7 @@ int main() {
     black
   );
   assert(moves2 == positionToBoard<OthelloMoves>(5, 5));
-  const auto moves3 = othelloGame.getMoves(
+  const auto moves3 = OthelloGame::getMoves(
     std::make_tuple(
       positionToBoard<OthelloBitBoard>(3, 3)
         | positionToBoard<OthelloBitBoard>(3, 4),

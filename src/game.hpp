@@ -11,17 +11,14 @@ public:
   Game& operator=(const Game&) = default;
   Game(Game&&) = default;
   Game& operator=(Game&&) = default;
+  static const MoveType getMoves(const StateType&, const PlayerType);
+  static const UtilityType getUtility(const StateType&, const PlayerType);
+  static const bool isTerminal(const StateType&);
+  static const StateType getResult(const StateType&,
+                                   const PlayerType,
+                                   const MoveType);
+  virtual void applyMove(const StateType&, const MoveType) = 0;
   virtual const StateType getState(void) const = 0;
-  virtual const MoveType getMoves(const StateType&,
-                                  const PlayerType) const = 0;
-  virtual const StateType getResult(const StateType&,
-                                    const PlayerType,
-                                    const MoveType) const = 0;
-  virtual void applyMove(const StateType&,
-                         const MoveType) = 0;
-  virtual const UtilityType getUtility(const StateType&,
-                                       const PlayerType) const = 0;
-  virtual const bool isTerminal(const StateType&) const = 0;
   virtual const PlayerType getPlayer(void) const = 0;
   ~Game() = default;
 };
