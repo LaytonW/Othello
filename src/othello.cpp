@@ -7,12 +7,6 @@
 
 using namespace Othello;
 
-constexpr auto othelloRowSize =
-  isqrt<std::numeric_limits<OthelloBitBoard>::digits>::value;
-
-using OthelloRow = BitType<othelloRowSize>;
-using OthelloCol = OthelloRow;
-
 constexpr std::size_t indexOf(const OthelloPlayer player) {
   return player == black ? 0 : 1;
 }
@@ -505,8 +499,8 @@ const OthelloState OthelloGame::getResult(const OthelloState& state,
   return std::make_tuple(blackBitBoard, whiteBitBoard);
 }
 
-void OthelloGame::applyMove(const OthelloState& state,
-                            const OthelloMoves  move) {
+void OthelloGame::applyMove(const OthelloMoves move) {
+  const auto state = this->getState();
   const auto res = OthelloGame::getResult(state, this->currentPlayer, move);
   this->blackBitBoard = std::get<indexOf(black)>(res);
   this->whiteBitBoard = std::get<indexOf(white)>(res);
@@ -535,4 +529,39 @@ const bool OthelloGame::isTerminal(const OthelloState& state) {
 
 const OthelloPlayer OthelloGame::getPlayer(void) const {
   return this->currentPlayer;
+}
+
+OthelloTextView::OthelloTextView(const OthelloGame& othelloGame)
+  :othelloGame(othelloGame) {}
+
+void OthelloTextView::updateGame(const OthelloGame& othelloGame) {
+  this->othelloGame = othelloGame;
+}
+
+const std::string OthelloTextView::getView(void) const {
+  const auto state = this->othelloGame.getState();
+  const auto blackBitBoard = std::get<indexOf(black)>(state);
+  const auto whiteBitBoard = std::get<indexOf(white)>(state);
+
+  std::string textView = "  A B C D E F G H\n";
+
+  for (std::size_t i = 0; i < othelloRowSize; i++) {
+    const auto blackRow = getRow(blackBitBoard, i);
+    const auto whiteRow = getRow(whiteBitBoard, i);
+    std::string row = "";
+    for (std::size_t j = 0; j < othelloRowSize; j++) {
+      bool isBlack = (blackRow >> j) & 1;
+      bool isWhite = (whiteRow >> j) & 1;
+      if (isBlack)
+        row = "b" + row;
+      else if (isWhite)
+        row = "w" + row;
+      else
+        row = "o" + row;
+      if (j != othelloRowSize - 1)
+        row = " " + row;
+    }
+    textView += std::to_string(i + 1) + " " + row + "\n";
+  }
+  return textView;
 }

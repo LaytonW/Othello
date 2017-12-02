@@ -82,10 +82,7 @@ int main() {
     (positionToBoard<OthelloMoves>(2, 2)
     | positionToBoard<OthelloMoves>(2, 4)));
 
-  othelloGame.applyMove(
-    othelloGame.getState(),
-    positionToBoard<OthelloMoves>(3, 2)
-  );
+  othelloGame.applyMove(positionToBoard<OthelloMoves>(3, 2));
   assert(othelloGame.getPlayer() == white);
   assert(std::get<0>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(3, 4)
@@ -103,10 +100,7 @@ int main() {
     | positionToBoard<OthelloMoves>(2, 4)
     | positionToBoard<OthelloMoves>(4, 2)));
 
-  othelloGame.applyMove(
-    othelloGame.getState(),
-    positionToBoard<OthelloMoves>(2, 2)
-  );
+  othelloGame.applyMove(positionToBoard<OthelloMoves>(2, 2));
   assert(othelloGame.getPlayer() == black);
   assert(std::get<0>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(3, 4)
@@ -127,10 +121,7 @@ int main() {
     | positionToBoard<OthelloMoves>(5, 4)
     | positionToBoard<OthelloMoves>(4, 5)));
 
-  othelloGame.applyMove(
-    othelloGame.getState(),
-    positionToBoard<OthelloMoves>(2, 3)
-  );
+  othelloGame.applyMove(positionToBoard<OthelloMoves>(2, 3));
   assert(othelloGame.getPlayer() == white);
   assert(std::get<0>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(3, 4)

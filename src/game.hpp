@@ -17,7 +17,7 @@ public:
   static const StateType getResult(const StateType&,
                                    const PlayerType,
                                    const MoveType);
-  virtual void applyMove(const StateType&, const MoveType) = 0;
+  virtual void applyMove(const MoveType) = 0;
   virtual const StateType getState(void) const = 0;
   virtual const PlayerType getPlayer(void) const = 0;
   ~Game() = default;

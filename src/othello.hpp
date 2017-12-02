@@ -4,17 +4,23 @@
 #include <cstdint>
 #include <tuple>
 
+#include "utils.hpp"
 #include "game.hpp"
+#include "view.hpp"
 
 namespace Othello {
   using OthelloBitBoard = uint64_t;
   using OthelloUtility  = int8_t; // Win, lose, or tie
-  using OthelloMoves    = OthelloBitBoard;
-  using OthelloState    = std::tuple<OthelloBitBoard, OthelloBitBoard>;
+  constexpr auto othelloRowSize =
+    isqrt<std::numeric_limits<OthelloBitBoard>::digits>::value;
+  using OthelloRow = BitType<othelloRowSize>;
+  using OthelloCol = OthelloRow;
+  using OthelloMoves = OthelloBitBoard;
+  using OthelloState = std::tuple<OthelloBitBoard, OthelloBitBoard>;
   enum  OthelloPlayer { black = -1, white = 1 };
 
   class OthelloGame final: public Game <OthelloState, OthelloMoves,
-                                 OthelloUtility, OthelloPlayer> {
+                                        OthelloUtility, OthelloPlayer> {
   private:
     OthelloBitBoard blackBitBoard = 0;
     OthelloBitBoard whiteBitBoard = 0;
@@ -23,7 +29,7 @@ namespace Othello {
   public:
     OthelloGame();
     const OthelloState getState(void) const override;
-    void applyMove(const OthelloState&, const OthelloMoves) override;
+    void applyMove(const OthelloMoves) override;
     const OthelloPlayer getPlayer(void) const override;
     static const OthelloMoves getMoves(const OthelloState&,
                                        const OthelloPlayer);
@@ -34,6 +40,17 @@ namespace Othello {
                                            const OthelloPlayer);
     static const bool isTerminal(const OthelloState&);
     ~OthelloGame() = default;
+  };
+
+  class OthelloTextView: public View<OthelloGame, std::string> {
+  private:
+    OthelloGame othelloGame;
+  public:
+    OthelloTextView() = delete;
+    OthelloTextView(const OthelloGame&);
+    const std::string getView(void) const override;
+    void updateGame(const OthelloGame&) override;
+    ~OthelloTextView() = default;
   };
 }
 
