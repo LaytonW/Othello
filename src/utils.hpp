@@ -61,6 +61,8 @@ inline BitStringType fillTail(const BitStringType x) {
 template <typename BitStringType>
 inline BitStringType fillBetween(const BitStringType x) {
   _sanityCheck<BitStringType>();
+  if (isPowerOf2(x))
+    return static_cast<BitStringType>(0);
   return fillTail(static_cast<BitStringType>(extractFirstOne(x) >> 1))
          ^ fillTail(static_cast<BitStringType>(extractLastOne(x)));
 }
@@ -166,6 +168,8 @@ inline auto getColumn(const BitBoardType board, const std::size_t i,
 template <typename BitStringType>
 inline std::size_t getRowNum(const BitStringType x) {
   _sanityCheck<BitStringType>();
+  if (x == 0)
+    return 0;
   auto tmp = x;
   constexpr auto boardSize = std::numeric_limits<BitStringType>::digits;
   constexpr auto boardRow  = isqrt<boardSize>::value;
@@ -180,6 +184,8 @@ inline std::size_t getRowNum(const BitStringType x) {
 template <typename BitStringType>
 inline std::size_t getColNum(const BitStringType x) {
   _sanityCheck<BitStringType>();
+  if (x == 0)
+    return 0;
   auto tmp = x;
   constexpr auto boardSize = std::numeric_limits<BitStringType>::digits;
   constexpr auto boardCol  = isqrt<boardSize>::value;
