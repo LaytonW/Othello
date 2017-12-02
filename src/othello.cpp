@@ -3,12 +3,15 @@
 #include "utils.hpp"
 #include "othello.hpp"
 
+#include <iostream>
+
 using namespace Othello;
 
-using OthelloRow =
-  BitType<isqrt<std::numeric_limits<OthelloBitBoard>::digits>::value>;
+constexpr auto othelloRowSize =
+  isqrt<std::numeric_limits<OthelloBitBoard>::digits>::value;
 
-constexpr auto othelloRowSize = std::numeric_limits<OthelloRow>::digits;
+using OthelloRow = BitType<othelloRowSize>;
+using OthelloCol = OthelloRow;
 
 constexpr std::size_t indexOf(const OthelloPlayer player) {
   return player == black ? 0 : 1;
@@ -26,7 +29,7 @@ const OthelloState OthelloGame::getState(void) const {
 }
 
 const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
-                                         const OthelloPlayer player) const {
+                                         const OthelloPlayer player) {
   OthelloBitBoard moves = 0;
 
   const OthelloBitBoard playerBoard =
@@ -363,43 +366,170 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
 const OthelloState OthelloGame::getResult(const OthelloState& state,
                                           const OthelloPlayer player,
-                                          const OthelloMoves  moves) const {
+                                          const OthelloMoves  move) {
   auto blackBitBoard = std::get<indexOf(black)>(state);
   auto whiteBitBoard = std::get<indexOf(white)>(state);
-  if (player == black)
-    blackBitBoard |= moves;
-  else
-    whiteBitBoard |= moves;
+  auto& playerBoard = player == black ? blackBitBoard : whiteBitBoard;
+  auto& opponentBoard = player == black ? whiteBitBoard : blackBitBoard;
+  const auto tmpPlayerBoard = playerBoard;
+  const auto tmpOpponentBoard = opponentBoard;
+  const auto flipBoard = tmpPlayerBoard & OthelloGame::getMoves(
+    player == black ? std::make_tuple(move, whiteBitBoard)
+                    : std::make_tuple(blackBitBoard, move),
+    player
+  );
+
+  const auto rowNum = getRowNum(move);
+  const auto colNum = getColNum(move);
+
+  const auto moveRow = getRow(move, rowNum);
+  const auto flipRow = getRow(flipBoard, rowNum);
+  const auto plyrRow = getRow(tmpPlayerBoard, rowNum);
+  const auto oppoRow = getRow(tmpOpponentBoard, rowNum);
+
+  const auto rowFlips = fillBetween(static_cast<OthelloRow>(moveRow | flipRow));
+
+  opponentBoard = setRow(opponentBoard, rowNum,
+                         static_cast<OthelloRow>(oppoRow & ~rowFlips));
+  playerBoard = setRow(playerBoard, rowNum,
+                       static_cast<OthelloRow>(plyrRow | (oppoRow & rowFlips)));
+
+  const auto moveCol = getColumn(move, colNum);
+  const auto flipCol = getColumn(flipBoard, colNum);
+  const auto plyrCol = getColumn(tmpPlayerBoard, colNum);
+  const auto oppoCol = getColumn(tmpOpponentBoard, colNum);
+
+  const auto colFlips = fillBetween(static_cast<OthelloCol>(moveCol | flipCol));
+
+  opponentBoard = setCol(opponentBoard, colNum,
+                         static_cast<OthelloCol>(oppoCol & ~colFlips));
+  playerBoard = setCol(playerBoard, colNum,
+                       static_cast<OthelloCol>(plyrCol | (oppoCol & colFlips)));
+
+  using _signedType = std::make_signed<decltype(rowNum)>::type;
+  const auto diff =
+    static_cast<_signedType>(rowNum) - static_cast<_signedType>(colNum);
+  const auto diagNum = (diff + othelloRowSize) % othelloRowSize;
+  const auto sum = rowNum + colNum;
+  const auto antiDiagNum = sum % othelloRowSize;
+
+  const auto moveDiag = getRow(antiClockRotate45(move), diagNum);
+  const auto flipDiag = getRow(antiClockRotate45(flipBoard), diagNum);
+  const auto plyrDiag = getRow(antiClockRotate45(tmpPlayerBoard), diagNum);
+  const auto oppoDiag = getRow(antiClockRotate45(tmpOpponentBoard), diagNum);
+
+  if (diagNum == 0) {
+    const auto diagFlips =
+      fillBetween(static_cast<OthelloRow>(moveDiag | flipDiag));
+    opponentBoard = setDiag(opponentBoard, diagNum,
+                            static_cast<OthelloRow>(oppoDiag & ~diagFlips));
+    playerBoard = setDiag(
+      playerBoard, diagNum,
+      static_cast<OthelloRow>(plyrDiag | (oppoDiag & diagFlips))
+    );
+  } else {
+    const OthelloRow lowerMask = fillTail(
+      static_cast<OthelloRow>(1 << diagNum)
+    );
+    const OthelloRow upperMask = ~lowerMask;
+
+    const auto upperMoveDiag = static_cast<OthelloRow>(moveDiag & upperMask);
+    const auto lowerMoveDiag = static_cast<OthelloRow>(moveDiag & lowerMask);
+
+    const auto upperFlipDiag = static_cast<OthelloRow>(flipDiag & upperMask);
+    const auto lowerFlipDiag = static_cast<OthelloRow>(flipDiag & lowerMask);
+
+    const auto diagFlips = diff > 0 ?
+      fillBetween(static_cast<OthelloRow>(upperMoveDiag | upperFlipDiag))
+      & upperMask :
+      fillBetween(static_cast<OthelloRow>(lowerMoveDiag | lowerFlipDiag))
+      & lowerMask;
+    opponentBoard = setDiag(opponentBoard, diagNum,
+                            static_cast<OthelloRow>(oppoDiag & ~diagFlips));
+    playerBoard = setDiag(
+      playerBoard, diagNum,
+      static_cast<OthelloRow>(plyrDiag | (oppoDiag & diagFlips))
+    );
+  }
+
+  const auto moveAntiDiag = getRow(clockRotate45(move), antiDiagNum);
+  const auto flipAntiDiag = getRow(clockRotate45(flipBoard), antiDiagNum);
+  const auto plyrAntiDiag = getRow(clockRotate45(tmpPlayerBoard), antiDiagNum);
+  const auto oppoAntiDiag =
+    getRow(clockRotate45(tmpOpponentBoard), antiDiagNum);
+
+  if (antiDiagNum == othelloRowSize - 1) {
+    const auto diagFlips =
+      fillBetween(static_cast<OthelloRow>(moveAntiDiag | flipAntiDiag));
+    opponentBoard = setAntiDiag(
+      opponentBoard, antiDiagNum,
+      static_cast<OthelloRow>(oppoAntiDiag & ~diagFlips)
+    );
+    playerBoard = setAntiDiag(
+      playerBoard, antiDiagNum,
+      static_cast<OthelloRow>(plyrAntiDiag | (oppoAntiDiag & diagFlips))
+    );
+  } else {
+    const OthelloRow lowerMask = fillTail(
+      static_cast<OthelloRow>(1 << (othelloRowSize - 2 - antiDiagNum))
+    );
+    const OthelloRow upperMask = ~lowerMask;
+
+    const auto upperMoveAntiDiag =
+      static_cast<OthelloRow>(moveAntiDiag & upperMask);
+    const auto lowerMoveAntiDiag =
+      static_cast<OthelloRow>(moveAntiDiag & lowerMask);
+
+    const auto upperFlipAntiDiag =
+      static_cast<OthelloRow>(flipAntiDiag & upperMask);
+    const auto lowerFlipAntiDiag =
+      static_cast<OthelloRow>(flipAntiDiag & lowerMask);
+
+    const auto diagFlips = sum < 8 ?
+      fillBetween(static_cast<OthelloRow>(upperMoveAntiDiag|upperFlipAntiDiag))
+      & upperMask :
+      fillBetween(static_cast<OthelloRow>(lowerMoveAntiDiag|lowerFlipAntiDiag))
+      & lowerMask;
+    opponentBoard = setAntiDiag(
+      opponentBoard, antiDiagNum,
+      static_cast<OthelloRow>(oppoAntiDiag & ~diagFlips)
+    );
+    playerBoard = setAntiDiag(
+      playerBoard, antiDiagNum,
+      static_cast<OthelloRow>(plyrAntiDiag | (oppoAntiDiag & diagFlips))
+    );
+  }
+
+  playerBoard |= move;
+
   return std::make_tuple(blackBitBoard, whiteBitBoard);
 }
 
 void OthelloGame::applyMove(const OthelloState& state,
                             const OthelloMoves  move) {
-  this->blackBitBoard = std::get<indexOf(black)>(state);
-  this->whiteBitBoard = std::get<indexOf(white)>(state);
-  // TODO: flip opponent tokens
-  if (this->currentPlayer == black)
-    blackBitBoard |= move;
-  else
-    whiteBitBoard |= move;
+  const auto res = OthelloGame::getResult(state, this->currentPlayer, move);
+  this->blackBitBoard = std::get<indexOf(black)>(res);
+  this->whiteBitBoard = std::get<indexOf(white)>(res);
   this->currentPlayer = static_cast<OthelloPlayer>(-this->currentPlayer);
 }
 
 const OthelloUtility
-OthelloGame::getUtility(const OthelloState& state,
-                        const OthelloPlayer player) const {
-  // TODO: check if is terminal state
+OthelloGame::getUtility(const OthelloState& state, const OthelloPlayer player) {
+  const auto blackBitBoard = std::get<indexOf(black)>(state);
+  const auto whiteBitBoard = std::get<indexOf(white)>(state);
   char whiteUtility =
-    countOnes(this->blackBitBoard) == countOnes(this->whiteBitBoard) ? 0 :
-    countOnes(this->blackBitBoard) <  countOnes(this->whiteBitBoard) ? 1 : -1;
+    countOnes(blackBitBoard) == countOnes(whiteBitBoard) ? 0 :
+    countOnes(blackBitBoard) <  countOnes(whiteBitBoard) ? 1 : -1;
   return player * whiteUtility;
 }
 
-const bool OthelloGame::isTerminal(const OthelloState& state) const {
-  bool filled = (this->blackBitBoard | this->whiteBitBoard) ==
+const bool OthelloGame::isTerminal(const OthelloState& state) {
+  const auto blackBitBoard = std::get<indexOf(black)>(state);
+  const auto whiteBitBoard = std::get<indexOf(white)>(state);
+  bool filled = (blackBitBoard | whiteBitBoard) ==
     ~static_cast<OthelloBitBoard>(0);
-  bool noMove = this->getMoves(state, black) == 0 and
-                this->getMoves(state, white) == 0;
+  bool noMove = OthelloGame::getMoves(state, black) == 0 and
+                OthelloGame::getMoves(state, white) == 0;
   return filled or noMove;
 }
 

@@ -28,39 +28,32 @@ int main() {
     (positionToBoard<OthelloBitBoard>(3, 3)
     | positionToBoard<OthelloBitBoard>(4, 4)));
 
-  // Test getPlayer
-  assert(othelloGame.getPlayer() == black);
-  othelloGame.applyMove(othelloGame.getState(), static_cast<OthelloMoves>(0));
-  assert(othelloGame.getPlayer() == white);
-  othelloGame.applyMove(othelloGame.getState(), static_cast<OthelloMoves>(0));
-  assert(othelloGame.getPlayer() == black);
-
   // Test getResult
   const auto result1 = OthelloGame::getResult(
     othelloGame.getState(), othelloGame.getPlayer(),
-    positionToBoard<OthelloMoves>(0, 0)
+    positionToBoard<OthelloMoves>(3, 2)
   );
   assert(std::get<0>(result1) ==
     (positionToBoard<OthelloBitBoard>(3, 4)
     | positionToBoard<OthelloBitBoard>(4, 3)
-    | positionToBoard<OthelloBitBoard>(0, 0)));
-  assert(std::get<1>(result1) ==
-    (positionToBoard<OthelloBitBoard>(3, 3)
-    | positionToBoard<OthelloBitBoard>(4, 4)));
+    | positionToBoard<OthelloBitBoard>(3, 2)
+    | positionToBoard<OthelloBitBoard>(3, 3)));
+  assert(std::get<1>(result1) == positionToBoard<OthelloBitBoard>(4, 4));
   const auto result2 = OthelloGame::getResult(
     result1, white,
-    positionToBoard<OthelloMoves>(5, 2)
+    positionToBoard<OthelloMoves>(2, 4)
   );
   assert(std::get<0>(result2) ==
-    (positionToBoard<OthelloBitBoard>(3, 4)
-    | positionToBoard<OthelloBitBoard>(4, 3)
-    | positionToBoard<OthelloBitBoard>(0, 0)));
+    (positionToBoard<OthelloBitBoard>(4, 3)
+    | positionToBoard<OthelloBitBoard>(3, 3)
+    | positionToBoard<OthelloBitBoard>(3, 2)));
   assert(std::get<1>(result2) ==
-    (positionToBoard<OthelloBitBoard>(3, 3)
+    (positionToBoard<OthelloBitBoard>(3, 4)
     | positionToBoard<OthelloBitBoard>(4, 4)
-    | positionToBoard<OthelloBitBoard>(5, 2)));
+    | positionToBoard<OthelloBitBoard>(2, 4)));
 
-  // Test getMoves and applyMove
+  // Test getMoves, getPlayer, and applyMove
+  assert(othelloGame.getPlayer() == black);
   const auto moves1 = OthelloGame::getMoves(
     othelloGame.getState(), othelloGame.getPlayer()
   );
@@ -89,29 +82,73 @@ int main() {
     (positionToBoard<OthelloMoves>(2, 2)
     | positionToBoard<OthelloMoves>(2, 4)));
 
-  othelloGame.applyMove(othelloGame.getState(), static_cast<OthelloMoves>(0));
+  othelloGame.applyMove(
+    othelloGame.getState(),
+    positionToBoard<OthelloMoves>(3, 2)
+  );
+  assert(othelloGame.getPlayer() == white);
   assert(std::get<0>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(3, 4)
-    | positionToBoard<OthelloBitBoard>(4, 3)));
-  assert(std::get<1>(othelloGame.getState()) ==
-    (positionToBoard<OthelloBitBoard>(3, 3)
-    | positionToBoard<OthelloBitBoard>(4, 4)));
-  othelloGame.applyMove(othelloGame.getState(), static_cast<OthelloMoves>(0));
-  assert(std::get<0>(othelloGame.getState()) ==
-    (positionToBoard<OthelloBitBoard>(3, 4)
-    | positionToBoard<OthelloBitBoard>(4, 3)));
-  assert(std::get<1>(othelloGame.getState()) ==
-    (positionToBoard<OthelloBitBoard>(3, 3)
-    | positionToBoard<OthelloBitBoard>(4, 4)));
-  // TODO: flip opponent tokens
-  othelloGame.applyMove(othelloGame.getState(), extractFirstOne(moves1));
+    | positionToBoard<OthelloBitBoard>(4, 3)
+    | positionToBoard<OthelloBitBoard>(3, 2)
+    | positionToBoard<OthelloBitBoard>(3, 3)));
+  assert(std::get<1>(result1) == positionToBoard<OthelloBitBoard>(4, 4));
+
+  const auto moves4 = OthelloGame::getMoves(
+    othelloGame.getState(), othelloGame.getPlayer()
+  );
+
+  assert(moves4 ==
+    (positionToBoard<OthelloMoves>(2, 2)
+    | positionToBoard<OthelloMoves>(2, 4)
+    | positionToBoard<OthelloMoves>(4, 2)));
+
+  othelloGame.applyMove(
+    othelloGame.getState(),
+    positionToBoard<OthelloMoves>(2, 2)
+  );
+  assert(othelloGame.getPlayer() == black);
   assert(std::get<0>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(3, 4)
     | positionToBoard<OthelloBitBoard>(4, 3)
     | positionToBoard<OthelloBitBoard>(3, 2)));
   assert(std::get<1>(othelloGame.getState()) ==
     (positionToBoard<OthelloBitBoard>(4, 4)
-    | positionToBoard<OthelloBitBoard>(3, 3)));
+    | positionToBoard<OthelloBitBoard>(3, 3)
+    | positionToBoard<OthelloBitBoard>(2, 2)));
+
+  const auto moves5 = OthelloGame::getMoves(
+    othelloGame.getState(), othelloGame.getPlayer()
+  );
+
+  assert(moves5 ==
+    (positionToBoard<OthelloMoves>(1, 2)
+    | positionToBoard<OthelloMoves>(2, 3)
+    | positionToBoard<OthelloMoves>(5, 4)
+    | positionToBoard<OthelloMoves>(4, 5)));
+
+  othelloGame.applyMove(
+    othelloGame.getState(),
+    positionToBoard<OthelloMoves>(2, 3)
+  );
+  assert(othelloGame.getPlayer() == white);
+  assert(std::get<0>(othelloGame.getState()) ==
+    (positionToBoard<OthelloBitBoard>(3, 4)
+    | positionToBoard<OthelloBitBoard>(4, 3)
+    | positionToBoard<OthelloBitBoard>(3, 3)
+    | positionToBoard<OthelloBitBoard>(2, 3)
+    | positionToBoard<OthelloBitBoard>(3, 2)));
+  assert(std::get<1>(othelloGame.getState()) ==
+    (positionToBoard<OthelloBitBoard>(4, 4)
+    | positionToBoard<OthelloBitBoard>(2, 2)));
+
+  const auto moves6 = OthelloGame::getMoves(
+    othelloGame.getState(), othelloGame.getPlayer()
+  );
+
+  assert(moves6 ==
+    (positionToBoard<OthelloMoves>(4, 2)
+    | positionToBoard<OthelloMoves>(2, 4)));
 
   std::cout << "All tests passed for Othello Game!" << std::endl;
   return 0;
