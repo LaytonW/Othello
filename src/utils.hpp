@@ -156,6 +156,34 @@ inline auto getColumn(const BitBoardType board, const std::size_t i,
   return col;
 }
 
+template <typename BitStringType>
+inline std::size_t getRowNum(const BitStringType x) {
+  _sanityCheck<BitStringType>();
+  auto tmp = x;
+  constexpr auto boardSize = std::numeric_limits<BitStringType>::digits;
+  constexpr auto boardRow  = isqrt<boardSize>::value;
+  std::size_t count = 0;
+  while (tmp != 0) {
+    tmp >>= 1;
+    count ++;
+  }
+  return boardRow - (count - 1) / boardRow - 1;
+}
+
+template <typename BitStringType>
+inline std::size_t getColNum(const BitStringType x) {
+  _sanityCheck<BitStringType>();
+  auto tmp = x;
+  constexpr auto boardSize = std::numeric_limits<BitStringType>::digits;
+  constexpr auto boardCol  = isqrt<boardSize>::value;
+  std::size_t count = 0;
+  while (tmp != 0) {
+    tmp >>= 1;
+    count ++;
+  }
+  return boardCol - (count - 1) % boardCol - 1;
+}
+
 template <typename BitBoardType>
 inline BitBoardType getTranspose(const BitBoardType board) {
   _sanityCheck<BitBoardType>();

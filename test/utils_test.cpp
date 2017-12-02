@@ -178,6 +178,23 @@ int main() {
   assert(getColumn(positionToBoard<uint64_t>(3, 4), 3, true) ==
                    static_cast<uint8_t>(1) << 4);
 
+  // Test getRowNum
+  assert(getRowNum(positionToBoard<uint64_t>(0, 0)) == 0);
+  assert(getRowNum(positionToBoard<uint64_t>(0, 1)) == 1);
+  assert(getRowNum(positionToBoard<uint64_t>(1, 1)) == 1);
+  assert(getRowNum(positionToBoard<uint64_t>(4, 4)) == 4);
+  assert(getRowNum(positionToBoard<uint64_t>(7, 2)) == 2);
+  assert(getRowNum(positionToBoard<uint64_t>(7, 0)) == 0);
+  assert(getRowNum(positionToBoard<uint64_t>(5, 7)) == 7);
+
+  // Test getColNum
+  assert(getColNum(positionToBoard<uint64_t>(0, 0)) == 0);
+  assert(getColNum(positionToBoard<uint64_t>(1, 0)) == 1);
+  assert(getColNum(positionToBoard<uint64_t>(1, 1)) == 1);
+  assert(getColNum(positionToBoard<uint64_t>(4, 4)) == 4);
+  assert(getColNum(positionToBoard<uint64_t>(7, 2)) == 7);
+  assert(getColNum(positionToBoard<uint64_t>(7, 0)) == 7);
+
   // Test getTranspose
   assert(getTranspose(positionToBoard<uint64_t>(0, 0)) ==
                       positionToBoard<uint64_t>(0, 0));
