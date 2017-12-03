@@ -19,6 +19,10 @@ namespace Othello {
   using OthelloState = std::tuple<OthelloBitBoard, OthelloBitBoard>;
   enum  OthelloPlayer { black = -1, white = 1 };
 
+  constexpr std::size_t indexOf(const OthelloPlayer player) {
+    return player == black ? 0 : 1;
+  }
+
   class OthelloGame final: public Game <OthelloState, OthelloMoves,
                                         OthelloUtility, OthelloPlayer> {
   private:
@@ -40,19 +44,6 @@ namespace Othello {
                                            const OthelloPlayer);
     static const bool isTerminal(const OthelloState&);
     ~OthelloGame() = default;
-  };
-
-  class OthelloTextController: public Controller <OthelloGame, std::string,
-                                                  OthelloMoves> {
-  private:
-    OthelloGame othelloGame;
-  public:
-    OthelloTextController() = delete;
-    OthelloTextController(const OthelloGame&);
-    const std::string getView(void) const override;
-    void applyControl(const OthelloMoves) override;
-    const OthelloMoves requestControl(void) const override;
-    ~OthelloTextController() = default;
   };
 }
 
