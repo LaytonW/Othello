@@ -531,14 +531,10 @@ const OthelloPlayer OthelloGame::getPlayer(void) const {
   return this->currentPlayer;
 }
 
-OthelloTextView::OthelloTextView(const OthelloGame& othelloGame)
+OthelloTextController::OthelloTextController(const OthelloGame& othelloGame)
   :othelloGame(othelloGame) {}
 
-void OthelloTextView::updateGame(const OthelloGame& othelloGame) {
-  this->othelloGame = othelloGame;
-}
-
-const std::string OthelloTextView::getView(void) const {
+const std::string OthelloTextController::getView(void) const {
   const auto state = this->othelloGame.getState();
   const auto blackBitBoard = std::get<indexOf(black)>(state);
   const auto whiteBitBoard = std::get<indexOf(white)>(state);
@@ -564,4 +560,52 @@ const std::string OthelloTextView::getView(void) const {
     textView += std::to_string(i + 1) + " " + row + "\n";
   }
   return textView;
+}
+
+const bool _isValidInput(const std::string input) {
+  if (input.length() != 2)
+    return false;
+  if (input.at(0) > 'H' or input.at(0) < 'A')
+    return false;
+  if (input.at(1) > '8' or input.at(1) < '1')
+    return false;
+  return true;
+}
+
+const OthelloMoves _parseMove(const std::string input) {
+  const std::size_t colNum = input.at(0) - 'A';
+  const std::size_t rowNum = input.at(1) - '1';
+  return positionToBoard<OthelloMoves>(colNum, rowNum);
+}
+
+const bool _isValidMove(const OthelloMoves move, const OthelloMoves allowed) {
+  return move & allowed;
+}
+
+const OthelloMoves OthelloTextController::requestControl(void) const {
+  std::string input = "";
+  OthelloMoves move = 0;
+  const OthelloMoves allowed = OthelloGame::getMoves(
+    this->othelloGame.getState(), this->othelloGame.getPlayer()
+  );
+
+  while (true) {
+    std::cout << "Input move coordinates: ";
+    std::cin >> input;
+    if (not _isValidInput(input))
+      std::cout << "Invalid input!" << std::endl;
+    else {
+      move = _parseMove(input);
+      if (not _isValidMove(move, allowed))
+        std::cout << "Invalid move!" << std::endl;
+      else
+        break;
+    }
+  }
+
+  return move;
+}
+
+void OthelloTextController::applyControl(const OthelloMoves move) {
+  this->othelloGame.applyMove(move);
 }

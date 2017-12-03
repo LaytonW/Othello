@@ -6,7 +6,7 @@
 
 #include "utils.hpp"
 #include "game.hpp"
-#include "view.hpp"
+#include "controller.hpp"
 
 namespace Othello {
   using OthelloBitBoard = uint64_t;
@@ -42,15 +42,17 @@ namespace Othello {
     ~OthelloGame() = default;
   };
 
-  class OthelloTextView: public View<OthelloGame, std::string> {
+  class OthelloTextController: public Controller <OthelloGame, std::string,
+                                                  OthelloMoves> {
   private:
     OthelloGame othelloGame;
   public:
-    OthelloTextView() = delete;
-    OthelloTextView(const OthelloGame&);
+    OthelloTextController() = delete;
+    OthelloTextController(const OthelloGame&);
     const std::string getView(void) const override;
-    void updateGame(const OthelloGame&) override;
-    ~OthelloTextView() = default;
+    void applyControl(const OthelloMoves) override;
+    const OthelloMoves requestControl(void) const override;
+    ~OthelloTextController() = default;
   };
 }
 

@@ -16,11 +16,11 @@ using namespace Othello;
 
 int main() {
   OthelloGame othelloGame;
-  OthelloTextView othelloTextView(othelloGame);
+  OthelloTextController othelloTextController(othelloGame);
 
-  std::cout << othelloTextView.getView() << std::endl;
+  std::cout << othelloTextController.getView() << std::endl;
   assert(
-    othelloTextView.getView() ==
+    othelloTextController.getView() ==
     "  A B C D E F G H\n"
     "1 o o o o o o o o\n"
     "2 o o o o o o o o\n"
@@ -32,11 +32,10 @@ int main() {
     "8 o o o o o o o o\n"
   );
 
-  othelloGame.applyMove(positionToBoard<OthelloMoves>(3, 2));
-  othelloTextView.updateGame(othelloGame);
-  std::cout << othelloTextView.getView() << std::endl;
+  othelloTextController.applyControl(positionToBoard<OthelloMoves>(3, 2));
+  std::cout << othelloTextController.getView() << std::endl;
   assert(
-    othelloTextView.getView() ==
+    othelloTextController.getView() ==
     "  A B C D E F G H\n"
     "1 o o o o o o o o\n"
     "2 o o o o o o o o\n"
@@ -48,11 +47,10 @@ int main() {
     "8 o o o o o o o o\n"
   );
 
-  othelloGame.applyMove(positionToBoard<OthelloMoves>(2, 2));
-  othelloTextView.updateGame(othelloGame);
-  std::cout << othelloTextView.getView() << std::endl;
+  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 2));
+  std::cout << othelloTextController.getView() << std::endl;
   assert(
-    othelloTextView.getView() ==
+    othelloTextController.getView() ==
     "  A B C D E F G H\n"
     "1 o o o o o o o o\n"
     "2 o o o o o o o o\n"
@@ -64,11 +62,10 @@ int main() {
     "8 o o o o o o o o\n"
   );
 
-  othelloGame.applyMove(positionToBoard<OthelloMoves>(2, 3));
-  othelloTextView.updateGame(othelloGame);
-  std::cout << othelloTextView.getView() << std::endl;
+  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 3));
+  std::cout << othelloTextController.getView() << std::endl;
   assert(
-    othelloTextView.getView() ==
+    othelloTextController.getView() ==
     "  A B C D E F G H\n"
     "1 o o o o o o o o\n"
     "2 o o o o o o o o\n"
@@ -80,11 +77,10 @@ int main() {
     "8 o o o o o o o o\n"
   );
 
-  othelloGame.applyMove(positionToBoard<OthelloMoves>(2, 4));
-  othelloTextView.updateGame(othelloGame);
-  std::cout << othelloTextView.getView() << std::endl;
+  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 4));
+  std::cout << othelloTextController.getView() << std::endl;
   assert(
-    othelloTextView.getView() ==
+    othelloTextController.getView() ==
     "  A B C D E F G H\n"
     "1 o o o o o o o o\n"
     "2 o o o o o o o o\n"
