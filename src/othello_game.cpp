@@ -457,7 +457,7 @@ const OthelloState OthelloGame::getResult(const OthelloState& state,
     );
   } else {
     const OthelloRow lowerMask = fillTail(
-      static_cast<OthelloRow>(1 << diagNum)
+      static_cast<OthelloRow>(1 << (diagNum - 1))
     );
     const OthelloRow upperMask = ~lowerMask;
 
@@ -538,6 +538,10 @@ void OthelloGame::applyMove(const OthelloMoves move) {
   const auto res = OthelloGame::getResult(state, this->currentPlayer, move);
   this->blackBitBoard = std::get<indexOf(black)>(res);
   this->whiteBitBoard = std::get<indexOf(white)>(res);
+  this->currentPlayer = static_cast<OthelloPlayer>(-this->currentPlayer);
+}
+
+void OthelloGame::pass(void) {
   this->currentPlayer = static_cast<OthelloPlayer>(-this->currentPlayer);
 }
 

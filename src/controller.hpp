@@ -11,6 +11,7 @@ public:
   Controller& operator=(Controller&&) = delete;
   virtual const ViewType getView(void) const = 0;
   virtual void applyMove(const MoveType) = 0;
+  virtual void pass(void) = 0;
   virtual const MoveType getMove(void) const = 0;
   virtual bool isTerminal(void) const = 0;
   ~Controller() = default;

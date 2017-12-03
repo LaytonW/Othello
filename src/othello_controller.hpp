@@ -34,11 +34,13 @@ namespace Othello {
 
     const std::string getView(void) const override;
     void applyMove(const OthelloMoves) override;
+    void pass(void) override;
     const OthelloMoves getMove(void) const override;
     bool isTerminal(void) const override;
 
     const IPlayerPtr getPlayer(void) const;
     const OthelloUtility getUtility(const OthelloPlayer) const;
+    bool noMove(void) const;
 
     static const std::string asString(const OthelloMoves);
   };

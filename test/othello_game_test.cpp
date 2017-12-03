@@ -53,6 +53,13 @@ int main() {
     | positionToBoard<OthelloBitBoard>(2, 4)));
 
   // Test getMoves, getPlayer, and applyMove
+  const auto gg = OthelloGame::getMoves(
+    std::make_tuple(
+      setRow(static_cast<OthelloBitBoard>(0), 7, static_cast<OthelloRow>(~(1 << 1 | 1 << 2))),
+      positionToBoard<OthelloBitBoard>(5, 7)
+    ),
+    black);
+  std::cout << gg << '\n';
   assert(othelloGame.getPlayer() == black);
   const auto moves1 = OthelloGame::getMoves(
     othelloGame.getState(), othelloGame.getPlayer()

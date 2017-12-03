@@ -39,6 +39,7 @@ namespace Othello {
 
     const OthelloState getState(void) const override;
     void applyMove(const OthelloMoves) override;
+    void pass(void) override;
     const OthelloPlayer getPlayer(void) const override;
     static const OthelloMoves getMoves(const OthelloState&,
                                        const OthelloPlayer);

@@ -1,5 +1,8 @@
 #include <iostream>
+#include <functional>
+#include <limits>
 
+#include "utils.hpp"
 #include "othello_player.hpp"
 
 using namespace Othello;
@@ -56,8 +59,110 @@ OthelloAlphaBetaPlayer::OthelloAlphaBetaPlayer(const std::string name)
   this->player = name == "Black" ? black : white;
 }
 
+using EvalFuncType =
+  std::function<const double (const OthelloState&, const OthelloPlayer)>;
+using StopFuncType =
+  std::function<bool (const OthelloState&, const std::size_t)>;
+
+const OthelloMoves alphaBetaSearch(
+  const OthelloState& state,
+  const OthelloPlayer player,
+  const std::size_t maxDepth=10,
+  StopFuncType stopFunc={},
+  EvalFuncType evalFunc={}
+) {
+  std::function<double (
+    const OthelloState&, const OthelloPlayer, double, double, const std::size_t
+  )> maxValue, minValue;
+
+  if (not stopFunc)
+    stopFunc = [=] (const auto state, const auto depth) {
+      return depth > maxDepth or OthelloGame::isTerminal(state);
+    };
+  if (not evalFunc)
+    evalFunc = [] (const auto state, const auto player) {
+      return OthelloGame::getUtility(state, player);
+    };
+
+  maxValue = [&] (
+    const OthelloState& state,
+    const OthelloPlayer player,
+    double alpha,
+    double beta,
+    const std::size_t depth
+  ) {
+    if (stopFunc(state, depth))
+      return evalFunc(state, player);
+    auto value = -std::numeric_limits<double>::infinity();
+    auto moves = OthelloGame::getMoves(state, player);
+    while (moves) {
+      const auto move = extractLastOne(moves);
+      moves = removeLastOne(moves);
+      value = std::max(
+        value,
+        minValue(
+          OthelloGame::getResult(
+            state, static_cast<OthelloPlayer>(player), move
+          ), static_cast<OthelloPlayer>(-player), alpha, beta, depth + 1
+        )
+      );
+      if (value >= beta)
+        return value;
+      alpha = std::max(alpha, value);
+    }
+    return value;
+  };
+
+  minValue = [&] (
+    const OthelloState& state,
+    const OthelloPlayer player,
+    double alpha,
+    double beta,
+    const std::size_t depth
+  ) {
+    if (stopFunc(state, depth))
+      return evalFunc(state, player);
+    auto value = std::numeric_limits<double>::infinity();
+    auto moves = OthelloGame::getMoves(state, player);
+    while (moves) {
+      const auto move = extractLastOne(moves);
+      moves = removeLastOne(moves);
+      value = std::min(
+        value,
+        maxValue(
+          OthelloGame::getResult(
+            state, static_cast<OthelloPlayer>(player), move
+          ), static_cast<OthelloPlayer>(-player), alpha, beta, depth + 1
+        )
+      );
+      if (value <= alpha)
+        return value;
+      beta = std::min(beta, value);
+    }
+    return value;
+  };
+
+  auto bestScore = -std::numeric_limits<double>::infinity();
+  auto beta = std::numeric_limits<double>::infinity();
+  OthelloMoves bestMove = 0;
+  auto moves = OthelloGame::getMoves(state, player);
+  while (moves) {
+    const auto move = extractLastOne(moves);
+    moves = removeLastOne(moves);
+    auto value = minValue(
+      OthelloGame::getResult(state, static_cast<OthelloPlayer>(player), move),
+      static_cast<OthelloPlayer>(-player), bestScore, beta, 1
+    );
+    if (value > bestScore) {
+      bestScore = value;
+      bestMove  = move;
+    }
+  }
+
+  return bestMove;
+}
+
 const OthelloMoves
 OthelloAlphaBetaPlayer::getMove(const OthelloState& state) const {
-  // TODO: implement alpha beta pruning search
-  return 0;
+  return alphaBetaSearch(state, this->player);
 }

@@ -18,6 +18,7 @@ public:
                                    const PlayerType,
                                    const MoveType);
   virtual void applyMove(const MoveType) = 0;
+  virtual void pass(void) = 0;
   virtual const StateType getState(void) const = 0;
   virtual const PlayerType getPlayer(void) const = 0;
   ~Game() = default;

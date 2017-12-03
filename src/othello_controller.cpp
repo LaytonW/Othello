@@ -53,6 +53,10 @@ void OthelloTextController::applyMove(const OthelloMoves move) {
   this->othelloGame.applyMove(move);
 }
 
+void OthelloTextController::pass(void) {
+  this->othelloGame.pass();
+}
+
 bool OthelloTextController::isTerminal(void) const {
   return OthelloGame::isTerminal(this->othelloGame.getState());
 }
@@ -65,6 +69,12 @@ const IPlayerPtr OthelloTextController::getPlayer(void) const {
 const OthelloUtility
 OthelloTextController::getUtility(const OthelloPlayer player) const {
   return OthelloGame::getUtility(this->othelloGame.getState(), player);
+}
+
+bool OthelloTextController::noMove(void) const {
+  return OthelloGame::getMoves(
+    this->othelloGame.getState(), this->othelloGame.getPlayer()
+  ) == 0;
 }
 
 const std::string OthelloTextController::asString(const OthelloMoves move) {
