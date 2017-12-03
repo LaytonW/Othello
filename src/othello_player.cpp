@@ -84,7 +84,7 @@ const OthelloMoves alphaBetaSearch(
       return OthelloGame::getUtility(state, player);
     };
 
-  maxValue = [&] (
+  maxValue = [=, &minValue] (
     const OthelloState& state,
     const OthelloPlayer player,
     double alpha,
@@ -113,7 +113,7 @@ const OthelloMoves alphaBetaSearch(
     return value;
   };
 
-  minValue = [&] (
+  minValue = [=, &maxValue] (
     const OthelloState& state,
     const OthelloPlayer player,
     double alpha,

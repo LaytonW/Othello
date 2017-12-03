@@ -76,31 +76,6 @@ int main() {
   assert(extractLastOne(0b0111ull) == 0b0001ull);
   assert(extractLastOne(0b0100'0000ull) == 0b0100'0000ull);
 
-  // Test extractFirstOne
-  assert(extractFirstOne(0b00ull) == 0b00ull);
-  assert(extractFirstOne(0b01ull) == 0b01ull);
-  assert(extractFirstOne(0b10ull) == 0b10ull);
-  assert(extractFirstOne(0b11ull) == 0b10ull);
-  assert(extractFirstOne(0b0100ull) == 0b0100ull);
-  assert(extractFirstOne(0b0110ull) == 0b0100ull);
-  assert(extractFirstOne(0b0111ull) == 0b0100ull);
-  assert(extractFirstOne(0b0101'0101ull) == 0b0100'0000ull);
-
-  // Test fillTail
-  assert(fillTail(0b01ull) == 0b01ull);
-  assert(fillTail(0b10ull) == 0b11ull);
-  assert(fillTail(0b11ull) == 0b11ull);
-  assert(fillTail(0b0100ull) == 0b0111ull);
-  assert(fillTail(0b0110ull) == 0b0111ull);
-  assert(fillTail(0b0111ull) == 0b0111ull);
-  assert(fillTail(0b0100'0000ull) == 0b0111'1111ull);
-
-  // Test fillBetween
-  assert(fillBetween(0b101ull) == 0b010ull);
-  assert(fillBetween(0b1001ull) == 0b0110ull);
-  assert(fillBetween(0b11ull) == 0b0ull);
-  assert(fillBetween(0b0100'0001ull) == 0b0011'1110ull);
-
   // Test countOnes
   assert(countOnes(0b00ull) == 0);
   assert(countOnes(0b01ull) == 1);
@@ -112,37 +87,12 @@ int main() {
   assert(countOnes(0b0011'1111ull) == 6);
   assert(countOnes(0b0101'0101ull) == 4);
 
-  // Test rotateL
-  assert(rotateL(0b00ull, 1) == 0b00ull);
-  assert(rotateL(0b01ull, 1) == 0b10ull);
-  assert(rotateL(0b01ull, 2) == 0b0100ull);
-  assert(rotateL(0b11ull, 1) == 0b0110ull);
-  assert(rotateL(0b0100ull, 1) == 0b1000ull);
-  assert(rotateL(static_cast<uint8_t>(0b0000'0100), 6) == 0b0000'0001);
-  assert(rotateL(static_cast<uint8_t>(0b0000'0100), 8) == 0b0000'0100);
-  assert(rotateL(static_cast<uint8_t>(0b0000'0100), 16) == 0b0000'0100);
-
-  // Test rotateR
-  assert(rotateR(0b00ull, 1) == 0b00ull);
-  assert(rotateR(0b10ull, 1) == 0b01ull);
-  assert(rotateR(0b0100ull, 2) == 0b0001ull);
-  assert(rotateR(static_cast<uint8_t>(0b0000'0100), 3) == 0b1000'0000);
-  assert(rotateR(static_cast<uint8_t>(0b0000'0100), 8) == 0b0000'0100);
-  assert(rotateR(static_cast<uint8_t>(0b0000'0100), 16) == 0b0000'0100);
-
   // Test isqrt
   static_assert(isqrt<1>::value == 1, "isqrt<1>::value should be 1!");
   static_assert(isqrt<4>::value == 2, "isqrt<4>::value should be 2!");
   static_assert(isqrt<16>::value == 4, "isqrt<16>::value should be 4!");
   static_assert(isqrt<64>::value == 8, "isqrt<64>::value should be 8!");
   static_assert(isqrt<256>::value == 16, "isqrt<256>::value should be 16!");
-
-  // Test pow2
-  static_assert(pow2<1>::value == 1, "pow2<1>::value should be 1!");
-  static_assert(pow2<2>::value == 4, "pow2<2>::value should be 4!");
-  static_assert(pow2<4>::value == 16, "pow2<4>::value should be 16!");
-  static_assert(pow2<8>::value == 64, "pow2<8>::value should be 64!");
-  static_assert(pow2<16>::value == 256, "pow2<16>::value should be 256!");
 
   // Test positionToBoard
   static_assert(std::is_same<decltype(positionToBoard<uint64_t>(0, 0)),
@@ -167,23 +117,6 @@ int main() {
   assert(getRow(positionToBoard<uint64_t>(3, 3), 3) ==
                 static_cast<uint8_t>(1) << 4);
 
-  // Test getColumn
-  static_assert(std::is_same<decltype(getColumn(static_cast<uint64_t>(0), 0)),
-                             uint8_t>::value,
-                "uint64_t board should have uint8_t columns!");
-  assert(getColumn(positionToBoard<uint64_t>(0, 0), 0) ==
-                   static_cast<uint8_t>(1) << 7);
-  assert(getColumn(positionToBoard<uint64_t>(0, 0), 1) ==
-                   static_cast<uint8_t>(0));
-  assert(getColumn(positionToBoard<uint64_t>(3, 3), 0) ==
-                   static_cast<uint8_t>(0));
-  assert(getColumn(positionToBoard<uint64_t>(3, 3), 3) ==
-                   static_cast<uint8_t>(1) << 4);
-  assert(getColumn(positionToBoard<uint64_t>(3, 4), 3) ==
-                   static_cast<uint8_t>(1) << 3);
-  assert(getColumn(positionToBoard<uint64_t>(3, 4), 3, true) ==
-                   static_cast<uint8_t>(1) << 4);
-
   // Test getRowNum
   assert(getRowNum(positionToBoard<uint64_t>(0, 0)) == 0);
   assert(getRowNum(positionToBoard<uint64_t>(0, 1)) == 1);
@@ -200,174 +133,6 @@ int main() {
   assert(getColNum(positionToBoard<uint64_t>(4, 4)) == 4);
   assert(getColNum(positionToBoard<uint64_t>(7, 2)) == 7);
   assert(getColNum(positionToBoard<uint64_t>(7, 0)) == 7);
-
-  // Test getTranspose
-  assert(getTranspose(positionToBoard<uint64_t>(0, 0)) ==
-                      positionToBoard<uint64_t>(0, 0));
-  assert(getTranspose(positionToBoard<uint64_t>(0, 1)) ==
-                      positionToBoard<uint64_t>(1, 0));
-  assert(getTranspose(positionToBoard<uint64_t>(0, 7)) ==
-                      positionToBoard<uint64_t>(7, 0));
-  assert(getTranspose(positionToBoard<uint64_t>(2, 6)) ==
-                      positionToBoard<uint64_t>(6, 2));
-  assert(getTranspose(positionToBoard<uint64_t>(3, 5)
-                      | positionToBoard<uint64_t>(6, 1)) ==
-                      (positionToBoard<uint64_t>(5, 3)
-                      | positionToBoard<uint64_t>(1, 6)));
-
-  // Test antiClockRotate45
-  assert(antiClockRotate45(positionToBoard<uint64_t>(0, 0)) ==
-                           positionToBoard<uint64_t>(0, 0));
-  assert(antiClockRotate45(positionToBoard<uint64_t>(0, 7)) ==
-                           positionToBoard<uint64_t>(0, 7));
-  assert(antiClockRotate45(positionToBoard<uint64_t>(2, 6)) ==
-                           positionToBoard<uint64_t>(2, 4));
-  assert(antiClockRotate45(positionToBoard<uint64_t>(3, 5)
-                           | positionToBoard<uint64_t>(6, 1)) ==
-                           (positionToBoard<uint64_t>(3, 2)
-                           | positionToBoard<uint64_t>(6, 3)));
-
-  // Test clockRotate45
-  assert(clockRotate45(positionToBoard<uint64_t>(0, 0)) ==
-                       positionToBoard<uint64_t>(0, 0));
-  assert(clockRotate45(positionToBoard<uint64_t>(0, 7)) ==
-                       positionToBoard<uint64_t>(0, 7));
-  assert(clockRotate45(positionToBoard<uint64_t>(2, 6)) ==
-                       positionToBoard<uint64_t>(2, 0));
-  assert(clockRotate45(positionToBoard<uint64_t>(3, 5)
-                       | positionToBoard<uint64_t>(6, 1)) ==
-                       (positionToBoard<uint64_t>(3, 0)
-                       | positionToBoard<uint64_t>(6, 7)));
-
-  // Test antiClockRotate90
-  assert(antiClockRotate90(positionToBoard<uint64_t>(0, 0)) ==
-                           positionToBoard<uint64_t>(0, 7));
-  assert(antiClockRotate90(positionToBoard<uint64_t>(0, 7)) ==
-                           positionToBoard<uint64_t>(7, 7));
-  assert(antiClockRotate90(positionToBoard<uint64_t>(2, 6)) ==
-                           positionToBoard<uint64_t>(6, 5));
-  assert(antiClockRotate90(positionToBoard<uint64_t>(3, 5)
-                           | positionToBoard<uint64_t>(6, 1)) ==
-                           (positionToBoard<uint64_t>(5, 4)
-                           | positionToBoard<uint64_t>(1, 1)));
-
-  // Test clockRotate90
-  assert(clockRotate90(positionToBoard<uint64_t>(0, 0)) ==
-                       positionToBoard<uint64_t>(7, 0));
-  assert(clockRotate90(positionToBoard<uint64_t>(0, 7)) ==
-                       positionToBoard<uint64_t>(0, 0));
-  assert(clockRotate90(positionToBoard<uint64_t>(2, 6)) ==
-                       positionToBoard<uint64_t>(1, 2));
-  assert(clockRotate90(positionToBoard<uint64_t>(3, 5)
-                       | positionToBoard<uint64_t>(6, 1)) ==
-                       (positionToBoard<uint64_t>(2, 3)
-                       | positionToBoard<uint64_t>(6, 6)));
-
-  // Test rotate180
-  assert(rotate180(positionToBoard<uint64_t>(0, 0)) ==
-                   positionToBoard<uint64_t>(7, 7));
-  assert(rotate180(positionToBoard<uint64_t>(0, 7)) ==
-                   positionToBoard<uint64_t>(7, 0));
-  assert(rotate180(positionToBoard<uint64_t>(2, 6)) ==
-                   positionToBoard<uint64_t>(5, 1));
-  assert(rotate180(positionToBoard<uint64_t>(3, 5)
-                   | positionToBoard<uint64_t>(6, 1)) ==
-                   (positionToBoard<uint64_t>(4, 2)
-                   | positionToBoard<uint64_t>(1, 6)));
-
-  assert(
-    antiClockRotate90(
-      clockRotate90(
-        positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1)
-      )
-    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
-  );
-
-  assert(
-    rotate180(
-      rotate180(
-        positionToBoard<uint64_t>(3, 5)
-        | positionToBoard<uint64_t>(6, 1)
-      )
-    ) == (positionToBoard<uint64_t>(3, 5) | positionToBoard<uint64_t>(6, 1))
-  );
-
-  // Test setRow
-  assert(setRow(
-    positionToBoard<uint64_t>(0, 0),
-    0, getRow(positionToBoard<uint64_t>(1, 0), 0))
-    == positionToBoard<uint64_t>(1, 0)
-  );
-  assert(setRow(
-    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
-    1, getRow(positionToBoard<uint64_t>(0, 0), 0))
-    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(0, 1))
-  );
-  assert(setRow(
-    positionToBoard<uint64_t>(0, 0),
-    7, getRow(positionToBoard<uint64_t>(0, 0), 0))
-    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(0, 7))
-  );
-
-  // Test setCol
-  assert(setCol(
-    positionToBoard<uint64_t>(0, 0),
-    0, getColumn(positionToBoard<uint64_t>(0, 1), 0))
-    == positionToBoard<uint64_t>(0, 1)
-  );
-  assert(setCol(
-    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
-    1, getRow(positionToBoard<uint64_t>(0, 0), 0))
-    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 0))
-  );
-  assert(setCol(
-    positionToBoard<uint64_t>(0, 0),
-    7, getRow(positionToBoard<uint64_t>(4, 3), 3))
-    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(7, 4))
-  );
-
-  // Test setDiag
-  assert(setDiag(
-    positionToBoard<uint64_t>(0, 0),
-    0, getRow(positionToBoard<uint64_t>(7, 0), 0))
-    == positionToBoard<uint64_t>(7, 7)
-  );
-  assert(setDiag(
-    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
-    0, getRow(positionToBoard<uint64_t>(0, 0), 0))
-    == positionToBoard<uint64_t>(0, 0)
-  );
-  assert(setDiag(
-    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
-    6, static_cast<uint8_t>(1 << 7 | 1 << 6))
-    == (positionToBoard<uint64_t>(0, 0)
-        | positionToBoard<uint64_t>(1, 1)
-        | positionToBoard<uint64_t>(0, 6)
-        | positionToBoard<uint64_t>(1, 7))
-  );
-  assert(setDiag(
-    positionToBoard<uint64_t>(0, 7) | positionToBoard<uint64_t>(1, 6),
-    6, static_cast<uint8_t>(1 << 7 | 1 << 6))
-    == (positionToBoard<uint64_t>(0, 7)
-        | positionToBoard<uint64_t>(1, 6)
-        | positionToBoard<uint64_t>(0, 6)
-        | positionToBoard<uint64_t>(1, 7))
-  );
-
-  // Test setAntiDiag
-  assert(setAntiDiag(
-    positionToBoard<uint64_t>(0, 0),
-    7, getRow(positionToBoard<uint64_t>(7, 0), 0))
-    == (positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(7, 0))
-  );
-  assert(setAntiDiag(
-    positionToBoard<uint64_t>(0, 0) | positionToBoard<uint64_t>(1, 1),
-    1, static_cast<uint8_t>(1 << 7 | 1 << 6))
-    == (positionToBoard<uint64_t>(0, 0)
-        | positionToBoard<uint64_t>(1, 1)
-        | positionToBoard<uint64_t>(0, 1)
-        | positionToBoard<uint64_t>(1, 0))
-  );
 
   std::cout << "All tests passed for utils!" << std::endl;
   return 0;
