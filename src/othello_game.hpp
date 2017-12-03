@@ -41,6 +41,7 @@ namespace Othello {
     void applyMove(const OthelloMoves) override;
     void pass(void) override;
     const OthelloPlayer getPlayer(void) const override;
+    const std::size_t getCount(const OthelloPlayer) const;
     static const OthelloMoves getMoves(const OthelloState&,
                                        const OthelloPlayer);
     static const OthelloState getResult(const OthelloState&,

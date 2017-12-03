@@ -16,13 +16,15 @@ int main() {
   std::cout << controller.getView() << std::endl;
   while (true) {
     if (controller.isTerminal()) {
-      std::cout << "\nGame over, ";
+      std::cout << "Game over, ";
       if (controller.getUtility(black) == 1)
         std::cout << "black win!" << std::endl;
       else if (controller.getUtility(white) == 1)
         std::cout << "white win!" << std::endl;
       else
         std::cout << "draw!" << std::endl;
+      std::cout << "Black: " << controller.getCount(black) << '\n'
+                << "White: " << controller.getCount(white) << std::endl;
       break;
     }
     const auto player = controller.getPlayer();

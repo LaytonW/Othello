@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <limits>
+#include <cmath>
 
 #include "utils.hpp"
 #include "othello_player.hpp"
@@ -84,7 +85,7 @@ const OthelloMoves alphaBetaSearch(
       return OthelloGame::getUtility(state, player);
     };
 
-  maxValue = [=, &minValue] (
+  maxValue = [&] (
     const OthelloState& state,
     const OthelloPlayer player,
     double alpha,
@@ -113,7 +114,7 @@ const OthelloMoves alphaBetaSearch(
     return value;
   };
 
-  minValue = [=, &maxValue] (
+  minValue = [&] (
     const OthelloState& state,
     const OthelloPlayer player,
     double alpha,
@@ -162,7 +163,80 @@ const OthelloMoves alphaBetaSearch(
   return bestMove;
 }
 
+const double
+differenceEvalFunc(const OthelloState& state, const OthelloPlayer player) {
+  OthelloBitBoard playerBoard =
+    player == black ? std::get<indexOf(black)>(state)
+                    : std::get<indexOf(white)>(state);
+  OthelloBitBoard opponentBoard =
+    player == black ? std::get<indexOf(white)>(state)
+                    : std::get<indexOf(black)>(state);
+
+  return static_cast<double>(countOnes(playerBoard))
+         - static_cast<double>(countOnes(opponentBoard));
+}
+
+const double
+L1WeightedEvalFunc(const OthelloState& state, const OthelloPlayer player) {
+  OthelloBitBoard playerBoard =
+    player == black ? std::get<indexOf(black)>(state)
+                    : std::get<indexOf(white)>(state);
+  OthelloBitBoard opponentBoard =
+    player == black ? std::get<indexOf(white)>(state)
+                    : std::get<indexOf(black)>(state);
+
+  double playerScore = 0., opponentScore = 0.;
+
+  while (playerBoard) {
+    const auto token = extractLastOne(playerBoard);
+    playerBoard = removeLastOne(playerBoard);
+    const auto rowNum = static_cast<double>(getRowNum(token));
+    const auto colNum = static_cast<double>(getColNum(token));
+    playerScore += std::abs(rowNum - 3.5) + std::abs(colNum - 3.5);
+  }
+
+  while (opponentBoard) {
+    const auto token = extractLastOne(opponentBoard);
+    opponentBoard = removeLastOne(opponentBoard);
+    const auto rowNum = static_cast<double>(getRowNum(token));
+    const auto colNum = static_cast<double>(getColNum(token));
+    opponentScore += std::abs(rowNum - 3.5) + std::abs(colNum - 3.5);
+  }
+
+  return playerScore - opponentScore;
+}
+
+const double
+L2WeightedEvalFunc(const OthelloState& state, const OthelloPlayer player) {
+  OthelloBitBoard playerBoard =
+    player == black ? std::get<indexOf(black)>(state)
+                    : std::get<indexOf(white)>(state);
+  OthelloBitBoard opponentBoard =
+    player == black ? std::get<indexOf(white)>(state)
+                    : std::get<indexOf(black)>(state);
+
+  double playerScore = 0., opponentScore = 0.;
+
+  while (playerBoard) {
+    const auto token = extractLastOne(playerBoard);
+    playerBoard = removeLastOne(playerBoard);
+    const auto rowNum = static_cast<double>(getRowNum(token));
+    const auto colNum = static_cast<double>(getColNum(token));
+    playerScore += std::pow(rowNum - 3.5, 2) + std::pow(colNum - 3.5, 2);
+  }
+
+  while (opponentBoard) {
+    const auto token = extractLastOne(opponentBoard);
+    opponentBoard = removeLastOne(opponentBoard);
+    const auto rowNum = static_cast<double>(getRowNum(token));
+    const auto colNum = static_cast<double>(getColNum(token));
+    opponentScore += std::pow(rowNum - 3.5, 2) + std::pow(colNum - 3.5, 2);
+  }
+
+  return playerScore - opponentScore;
+}
+
 const OthelloMoves
 OthelloAlphaBetaPlayer::getMove(const OthelloState& state) const {
-  return alphaBetaSearch(state, this->player);
+  return alphaBetaSearch(state, this->player, 11, {}, differenceEvalFunc);
 }

@@ -21,7 +21,6 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
   const OthelloBitBoard playerBoard =
     player == black ? std::get<indexOf(black)>(state)
                     : std::get<indexOf(white)>(state);
-
   const OthelloBitBoard opponentBoard =
     player == black ? std::get<indexOf(white)>(state)
                     : std::get<indexOf(black)>(state);
@@ -95,6 +94,13 @@ OthelloGame::getUtility(const OthelloState& state, const OthelloPlayer player) {
     countOnes(blackBitBoard) == countOnes(whiteBitBoard) ? 0 :
     countOnes(blackBitBoard) <  countOnes(whiteBitBoard) ? 1 : -1;
   return player * whiteUtility;
+}
+
+const std::size_t OthelloGame::getCount(const OthelloPlayer player) const {
+  const auto board =
+    player == black ? std::get<indexOf(black)>(this->getState())
+                    : std::get<indexOf(white)>(this->getState());
+  return countOnes(board);
 }
 
 const bool OthelloGame::isTerminal(const OthelloState& state) {

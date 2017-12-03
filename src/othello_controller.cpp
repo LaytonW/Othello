@@ -71,6 +71,11 @@ OthelloTextController::getUtility(const OthelloPlayer player) const {
   return OthelloGame::getUtility(this->othelloGame.getState(), player);
 }
 
+const std::size_t
+OthelloTextController::getCount(const OthelloPlayer player) const {
+  return this->othelloGame.getCount(player);
+}
+
 bool OthelloTextController::noMove(void) const {
   return OthelloGame::getMoves(
     this->othelloGame.getState(), this->othelloGame.getPlayer()

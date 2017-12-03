@@ -41,6 +41,7 @@ namespace Othello {
     const IPlayerPtr getPlayer(void) const;
     const OthelloUtility getUtility(const OthelloPlayer) const;
     bool noMove(void) const;
+    const std::size_t getCount(const OthelloPlayer) const;
 
     static const std::string asString(const OthelloMoves);
   };
