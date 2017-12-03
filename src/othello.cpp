@@ -539,12 +539,14 @@ const std::string OthelloTextController::getView(void) const {
   const auto blackBitBoard = std::get<indexOf(black)>(state);
   const auto whiteBitBoard = std::get<indexOf(white)>(state);
 
-  std::string textView = "  A B C D E F G H\n";
+  std::string textView =
+    "   A B C D E F G H \n"
+    "  +---------------+\n";
 
   for (std::size_t i = 0; i < othelloRowSize; i++) {
     const auto blackRow = getRow(blackBitBoard, i);
     const auto whiteRow = getRow(whiteBitBoard, i);
-    std::string row = "";
+    std::string row = "|";
     for (std::size_t j = 0; j < othelloRowSize; j++) {
       bool isBlack = (blackRow >> j) & 1;
       bool isWhite = (whiteRow >> j) & 1;
@@ -553,11 +555,11 @@ const std::string OthelloTextController::getView(void) const {
       else if (isWhite)
         row = "w" + row;
       else
-        row = "o" + row;
-      if (j != othelloRowSize - 1)
         row = " " + row;
+      row = "|" + row;
     }
-    textView += std::to_string(i + 1) + " " + row + "\n";
+    textView +=
+      std::to_string(i + 1) + " " + row + "\n" + "  +---------------+\n";
   }
   return textView;
 }
