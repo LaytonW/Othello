@@ -2,7 +2,7 @@
 #include <cassert>
 
 #include "utils.hpp"
-#include "othello.hpp"
+#include "othello_game.hpp"
 #include "othello_controller.hpp"
 
 using namespace Othello;

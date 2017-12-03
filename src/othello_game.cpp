@@ -1,7 +1,7 @@
 #include <limits>
 
 #include "utils.hpp"
-#include "othello.hpp"
+#include "othello_game.hpp"
 
 using namespace Othello;
 

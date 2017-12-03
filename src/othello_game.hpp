@@ -1,12 +1,11 @@
-#ifndef __OTHELLO_HPP__
-#define __OTHELLO_HPP__
+#ifndef __OTHELLO_GAME_HPP__
+#define __OTHELLO_GAME_HPP__
 
 #include <cstdint>
 #include <tuple>
 
 #include "utils.hpp"
 #include "game.hpp"
-#include "controller.hpp"
 
 namespace Othello {
   using OthelloBitBoard = uint64_t;

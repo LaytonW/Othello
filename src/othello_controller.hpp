@@ -1,7 +1,7 @@
 #ifndef __OTHELLO_CONTROLLER_HPP__
 #define __OTHELLO_CONTROLLER_HPP__
 
-#include "othello.hpp"
+#include "othello_game.hpp"
 #include "controller.hpp"
 
 namespace Othello {
