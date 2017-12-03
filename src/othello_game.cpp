@@ -39,7 +39,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow move = playerNext & opponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+        static_cast<OthelloRow>(
+          fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+        )
       ) : 0;
 
     rotate0Moves <<= othelloRowSize;
@@ -63,7 +65,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
       const OthelloRow move = playerNext & opponentRow
         ? extractFirstOne(
-          static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+          static_cast<OthelloRow>(
+            fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+          )
         ) : 0;
 
       clockRotate45Moves <<= othelloRowSize;
@@ -91,12 +95,18 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow upperMove = upperPlayerNext & upperOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(upperPlayerNext) ^ upperOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(upperPlayerNext) ^
+          (upperOpponentRow & fillTail(upperPlayerNext))
+        )
       ) & upperMask : 0;
 
     const OthelloRow lowerMove = lowerPlayerNext & lowerOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(lowerPlayerNext) ^ lowerOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(lowerPlayerNext) ^
+          (lowerOpponentRow & fillTail(lowerPlayerNext))
+        )
       ) & lowerMask : 0;
 
     clockRotate45Moves <<= othelloRowSize;
@@ -119,7 +129,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow move = playerNext & opponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+        static_cast<OthelloRow>(
+          fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+        )
       ) : 0;
 
     clockRotate90Moves <<= othelloRowSize;
@@ -145,7 +157,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
       const OthelloRow move = playerNext & opponentRow
         ? extractFirstOne(
-          static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+          static_cast<OthelloRow>(
+            fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+          )
         ) : 0;
 
       clockRotate135Moves <<= othelloRowSize;
@@ -173,12 +187,18 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow upperMove = upperPlayerNext & upperOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(upperPlayerNext) ^ upperOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(upperPlayerNext) ^
+          (upperOpponentRow & fillTail(upperPlayerNext))
+        )
       ) & upperMask : 0;
 
     const OthelloRow lowerMove = lowerPlayerNext & lowerOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(lowerPlayerNext) ^ lowerOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(lowerPlayerNext) ^
+          (lowerOpponentRow & fillTail(lowerPlayerNext))
+        )
       ) & lowerMask : 0;
 
     clockRotate135Moves <<= othelloRowSize;
@@ -201,7 +221,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow move = playerNext & opponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+        static_cast<OthelloRow>(
+          fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+        )
       ) : 0;
 
     rotate180Moves <<= othelloRowSize;
@@ -225,7 +247,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
       const OthelloRow move = playerNext & opponentRow
         ? extractFirstOne(
-          static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+          static_cast<OthelloRow>(
+            fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+          )
         ) : 0;
 
       antiClockRotate45Moves <<= othelloRowSize;
@@ -253,12 +277,18 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow upperMove = upperPlayerNext & upperOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(upperPlayerNext) ^ upperOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(upperPlayerNext) ^
+          (upperOpponentRow & fillTail(upperPlayerNext))
+        )
       ) & upperMask : 0;
 
     const OthelloRow lowerMove = lowerPlayerNext & lowerOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(lowerPlayerNext) ^ lowerOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(lowerPlayerNext) ^
+          (lowerOpponentRow & fillTail(lowerPlayerNext))
+        )
       ) & lowerMask : 0;
 
     antiClockRotate45Moves <<= othelloRowSize;
@@ -281,7 +311,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow move = playerNext & opponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+        static_cast<OthelloRow>(
+          fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+        )
       ) : 0;
 
     antiClockRotate90Moves <<= othelloRowSize;
@@ -307,7 +339,9 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
       const OthelloRow move = playerNext & opponentRow
         ? extractFirstOne(
-          static_cast<OthelloRow>(fillTail(playerNext) ^ opponentRow)
+          static_cast<OthelloRow>(
+            fillTail(playerNext) ^ (opponentRow & fillTail(playerNext))
+          )
         ) : 0;
 
       antiClockRotate135Moves <<= othelloRowSize;
@@ -335,12 +369,18 @@ const OthelloMoves OthelloGame::getMoves(const OthelloState& state,
 
     const OthelloRow upperMove = upperPlayerNext & upperOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(upperPlayerNext) ^ upperOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(upperPlayerNext) ^
+          (upperOpponentRow & fillTail(upperPlayerNext))
+        )
       ) & upperMask : 0;
 
     const OthelloRow lowerMove = lowerPlayerNext & lowerOpponentRow
       ? extractFirstOne(
-        static_cast<OthelloRow>(fillTail(lowerPlayerNext) ^ lowerOpponentRow)
+        static_cast<OthelloRow>(
+          fillTail(lowerPlayerNext) ^
+          (lowerOpponentRow & fillTail(lowerPlayerNext))
+        )
       ) & lowerMask : 0;
 
     antiClockRotate135Moves <<= othelloRowSize;

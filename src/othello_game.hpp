@@ -31,6 +31,12 @@ namespace Othello {
 
   public:
     OthelloGame();
+    OthelloGame(const OthelloGame&) = default;
+    OthelloGame& operator=(const OthelloGame&) = default;
+    OthelloGame(OthelloGame&&) = default;
+    OthelloGame& operator=(OthelloGame&&) = default;
+    ~OthelloGame() = default;
+
     const OthelloState getState(void) const override;
     void applyMove(const OthelloMoves) override;
     const OthelloPlayer getPlayer(void) const override;
@@ -42,7 +48,6 @@ namespace Othello {
     static const OthelloUtility getUtility(const OthelloState&,
                                            const OthelloPlayer);
     static const bool isTerminal(const OthelloState&);
-    ~OthelloGame() = default;
   };
 }
 

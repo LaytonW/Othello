@@ -4,6 +4,7 @@
 #include "utils.hpp"
 #include "othello_game.hpp"
 #include "othello_controller.hpp"
+#include "othello_player.hpp"
 
 using namespace Othello;
 
@@ -17,7 +18,11 @@ using namespace Othello;
 
 int main() {
   OthelloGame othelloGame;
-  OthelloTextController othelloTextController(othelloGame);
+  OthelloTextController othelloTextController(
+    othelloGame,
+    std::make_shared<OthelloQueryPlayer>(OthelloQueryPlayer("Black")),
+    std::make_shared<OthelloQueryPlayer>(OthelloQueryPlayer("White"))
+  );
 
   std::cout << othelloTextController.getView() << std::endl;
   assert(

@@ -1,11 +1,17 @@
 #include <iostream>
 
+#include "utils.hpp"
 #include "othello_controller.hpp"
 
 using namespace Othello;
 
-OthelloTextController::OthelloTextController(const OthelloGame& othelloGame)
-  :othelloGame(othelloGame) {}
+OthelloTextController::OthelloTextController(
+  const OthelloGame& othelloGame,
+  const IPlayerPtr blackPlayer,
+  const IPlayerPtr whitePlayer
+) : othelloGame(othelloGame),
+    blackPlayer(blackPlayer),
+    whitePlayer(whitePlayer) {}
 
 const std::string OthelloTextController::getView(void) const {
   const auto state = this->othelloGame.getState();
@@ -37,50 +43,33 @@ const std::string OthelloTextController::getView(void) const {
   return textView;
 }
 
-const bool _isValidInput(const std::string input) {
-  if (input.length() != 2)
-    return false;
-  if (input.at(0) > 'H' or input.at(0) < 'A')
-    return false;
-  if (input.at(1) > '8' or input.at(1) < '1')
-    return false;
-  return true;
-}
-
-const OthelloMoves _parseMove(const std::string input) {
-  const std::size_t colNum = input.at(0) - 'A';
-  const std::size_t rowNum = input.at(1) - '1';
-  return positionToBoard<OthelloMoves>(colNum, rowNum);
-}
-
-const bool _isValidMove(const OthelloMoves move, const OthelloMoves allowed) {
-  return move & allowed;
-}
-
 const OthelloMoves OthelloTextController::getMove(void) const {
-  std::string input = "";
-  OthelloMoves move = 0;
-  const OthelloMoves allowed = OthelloGame::getMoves(
-    this->othelloGame.getState(), this->othelloGame.getPlayer()
-  );
-
-  while (true) {
-    std::cout << "Input move coordinates: ";
-    std::cin >> input;
-    if (not _isValidInput(input))
-      std::cout << "Invalid input!" << std::endl;
-    else {
-      move = _parseMove(input);
-      if (not _isValidMove(move, allowed))
-        std::cout << "Invalid move!" << std::endl;
-      else
-        break;
-    }
-  }
-
-  return move;
+  return this->othelloGame.getPlayer() == black
+         ? this->blackPlayer->getMove(this->othelloGame.getState())
+         : this->whitePlayer->getMove(this->othelloGame.getState());
 }
 
 void OthelloTextController::applyMove(const OthelloMoves move) {
   this->othelloGame.applyMove(move);
+}
+
+bool OthelloTextController::isTerminal(void) const {
+  return OthelloGame::isTerminal(this->othelloGame.getState());
+}
+
+const IPlayerPtr OthelloTextController::getPlayer(void) const {
+  return this->othelloGame.getPlayer() == black
+         ? this->blackPlayer : this->whitePlayer;
+}
+
+const OthelloUtility
+OthelloTextController::getUtility(const OthelloPlayer player) const {
+  return OthelloGame::getUtility(this->othelloGame.getState(), player);
+}
+
+const std::string OthelloTextController::asString(const OthelloMoves move) {
+  std::string res = "";
+  res.push_back("ABCDEFGH"[getColNum(move)]);
+  res.push_back("12345678"[getRowNum(move)]);
+  return res;
 }
