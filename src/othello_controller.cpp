@@ -57,7 +57,7 @@ const bool _isValidMove(const OthelloMoves move, const OthelloMoves allowed) {
   return move & allowed;
 }
 
-const OthelloMoves OthelloTextController::requestControl(void) const {
+const OthelloMoves OthelloTextController::getMove(void) const {
   std::string input = "";
   OthelloMoves move = 0;
   const OthelloMoves allowed = OthelloGame::getMoves(
@@ -81,6 +81,6 @@ const OthelloMoves OthelloTextController::requestControl(void) const {
   return move;
 }
 
-void OthelloTextController::applyControl(const OthelloMoves move) {
+void OthelloTextController::applyMove(const OthelloMoves move) {
   this->othelloGame.applyMove(move);
 }

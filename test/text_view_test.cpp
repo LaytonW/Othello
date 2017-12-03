@@ -42,7 +42,7 @@ int main() {
     "   +---+---+---+---+---+---+---+---+\n"
   );
 
-  othelloTextController.applyControl(positionToBoard<OthelloMoves>(3, 2));
+  othelloTextController.applyMove(positionToBoard<OthelloMoves>(3, 2));
   std::cout << othelloTextController.getView() << std::endl;
   assert(
     othelloTextController.getView() ==
@@ -66,7 +66,7 @@ int main() {
     "   +---+---+---+---+---+---+---+---+\n"
   );
 
-  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 2));
+  othelloTextController.applyMove(positionToBoard<OthelloMoves>(2, 2));
   std::cout << othelloTextController.getView() << std::endl;
   assert(
     othelloTextController.getView() ==
@@ -90,7 +90,7 @@ int main() {
     "   +---+---+---+---+---+---+---+---+\n"
   );
 
-  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 3));
+  othelloTextController.applyMove(positionToBoard<OthelloMoves>(2, 3));
   std::cout << othelloTextController.getView() << std::endl;
   assert(
     othelloTextController.getView() ==
@@ -114,7 +114,7 @@ int main() {
     "   +---+---+---+---+---+---+---+---+\n"
   );
 
-  othelloTextController.applyControl(positionToBoard<OthelloMoves>(2, 4));
+  othelloTextController.applyMove(positionToBoard<OthelloMoves>(2, 4));
   std::cout << othelloTextController.getView() << std::endl;
   assert(
     othelloTextController.getView() ==

@@ -1,7 +1,7 @@
 #ifndef __CONTROLLER_HPP__
 #define __CONTROLLER_HPP__
 
-template <typename GameType, typename ViewType, typename ControlType>
+template <typename GameType, typename ViewType, typename MoveType>
 class Controller {
 public:
   Controller() = default;
@@ -10,8 +10,8 @@ public:
   Controller(Controller&&) = delete;
   Controller& operator=(Controller&&) = delete;
   virtual const ViewType getView(void) const = 0;
-  virtual void applyControl(const ControlType) = 0;
-  virtual const ControlType requestControl(void) const = 0;
+  virtual void applyMove(const MoveType) = 0;
+  virtual const MoveType getMove(void) const = 0;
   ~Controller() = default;
 };
 

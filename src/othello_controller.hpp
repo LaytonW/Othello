@@ -13,8 +13,8 @@ namespace Othello {
     OthelloTextController() = delete;
     OthelloTextController(const OthelloGame&);
     const std::string getView(void) const override;
-    void applyControl(const OthelloMoves) override;
-    const OthelloMoves requestControl(void) const override;
+    void applyMove(const OthelloMoves) override;
+    const OthelloMoves getMove(void) const override;
     ~OthelloTextController() = default;
   };
 }
