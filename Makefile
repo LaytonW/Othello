@@ -1,4 +1,4 @@
-.PHONY : clean all test othello run
+.PHONY : clean all test othello run debug
 
 BINDIR  := bin
 OBJDIR  := obj
@@ -19,12 +19,15 @@ MKDIR := mkdir
 RM    := rm -rf
 
 CXX      ?= g++
-CXXFLAGS := -std=c++14 -O3 -D NDEBUG -Wall -Werror
-TEST_CXXFLAGS := -std=c++14 -Og -ggdb -D DEBUG -Wall -Werror -I$(SRCDIR)
+CXXFLAGS := -std=c++14 -Wall -Werror
+TEST_CXXFLAGS := -std=c++14 -O0 -ggdb -D DEBUG -Wall -Werror -I$(SRCDIR)
 
 othello: all $(OTHELLO)
-all : $(OBJECTS)
-test: all $(TEST_OBJECTS)
+all: CXXFLAGS += -O3 -D NDEBUG
+all: $(OBJECTS)
+debug: CXXFLAGS += -O0 -D DEBUG -ggdb
+debug: $(OBJECTS) $(OTHELLO)
+test: debug $(TEST_OBJECTS)
 
 test_run: test
 	$(foreach t,$(TEST_OBJECTS),./$(t);)
