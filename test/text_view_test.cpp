@@ -20,8 +20,8 @@ int main() {
   OthelloGame othelloGame;
   OthelloTextController othelloTextController(
     othelloGame,
-    std::make_shared<OthelloQueryPlayer>(OthelloQueryPlayer("Black")),
-    std::make_shared<OthelloQueryPlayer>(OthelloQueryPlayer("White"))
+    std::make_shared<OthelloQueryPlayer>("Black"),
+    std::make_shared<OthelloQueryPlayer>("White")
   );
 
   std::cout << othelloTextController.getView() << std::endl;

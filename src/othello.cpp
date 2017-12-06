@@ -9,8 +9,8 @@ using namespace Othello;
 int main() {
   OthelloTextController controller(
     OthelloGame(),
-    std::make_shared<OthelloQueryPlayer>(OthelloQueryPlayer("Black")),
-    std::make_shared<OthelloAlphaBetaPlayer>(OthelloAlphaBetaPlayer("White"))
+    std::make_shared<OthelloQueryPlayer>("Black"),
+    std::make_shared<OthelloAlphaBetaPlayer>("White")
   );
 
   std::cout << controller.getView() << std::endl;
