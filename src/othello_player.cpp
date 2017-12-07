@@ -236,7 +236,13 @@ L2WeightedEvalFunc(const OthelloState& state, const OthelloPlayer player) {
   return playerScore - opponentScore;
 }
 
+const double
+mixedEvalFunc(const OthelloState& state, const OthelloPlayer player) {
+  return 0.6 * differenceEvalFunc(state, player) +
+         0.4 * L2WeightedEvalFunc(state, player);
+}
+
 const OthelloMoves
 OthelloAlphaBetaPlayer::getMove(const OthelloState& state) const {
-  return alphaBetaSearch(state, this->player, 11, {}, differenceEvalFunc);
+  return alphaBetaSearch(state, this->player, 7, {}, mixedEvalFunc);
 }
